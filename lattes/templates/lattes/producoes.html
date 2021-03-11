@@ -1,0 +1,55 @@
+{% extends 'lattes/layout.html' %}
+{% block main %}
+{% load lattes_extras %}
+<div id="head">
+    <p>Foram encontrados {{length}} resultados</p>
+</div>
+<div id="grid-main">
+    {% for producao in Producao_page %}
+    <div class="grid-item">
+        <p>
+            Titulo: <b>{{ producao.titulo }}</b> <br>
+            Tipo: {{producao.tipo }} <br>
+            Tipo Agrupador: {{ producao.tipoAgrupador }} <br>
+            Informado por: {{ producao.informadoPor }} <br>
+            Ano: {{ producao.ano }}
+        </p>
+    </div>
+    {% endfor %}
+    <div id="Paginator">
+        {% if Producao_page.has_previous %}
+        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fa fa-angle-double-left"></i></a>
+        <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i class="fa fa-angle-left"></i></a>
+        {% endif %}
+        <form method="GET">
+            <input type="number" name="page" placeholder="{{Producao_page.number}}"> / {{Producao_page.paginator.num_pages}}
+        </form>
+        {% if Producao_page.has_next %}
+        <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i class="fa fa-angle-right"></i></a>
+        <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i class="fa fa-angle-double-right"></i></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block aside %}
+<div id="filtroAno">
+    <div class="drop-bnt">
+        <h3>Ano Produção <i class="fa fa-caret-down"></i></h3>
+    </div>
+    <div class="wrapper">
+        <p>A partir de: <input type="text"> até: <input type="text"></p>
+    </div>
+</div>
+<form method="GET">
+    {{producoes_filtradas.form}}
+    <input type="submit">
+</form>
+<script>
+    const drop_bnt = document.querySelector(".drop-bnt");
+    const wrapper = document.querySelector(".wrapper");
+
+    drop_bnt.onclick = (() => {
+        wrapper.classList.toggle("show");
+    });
+</script>
+{% endblock %}

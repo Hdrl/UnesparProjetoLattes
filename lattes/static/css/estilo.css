@@ -1,33 +1,33 @@
-body{
+body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-header{
+header {
     background-color: black;
-} 
+}
 
-h1{
+h1 {
     color: white;
     font-size: 40px;
     text-align: center;
 }
 
-p,h2{
+p, h2 {
     text-align: center;
 }
 
-a{
+a {
     text-decoration: none;
     color: black;
 }
 
-.imagem{
+.imagem {
     margin: 10px auto 20px;
     display: block;
 }
 
-#grid-header{
+#grid-header {
     display: grid;
     padding: 20px;
     grid-column-gap: 20px;
@@ -35,7 +35,7 @@ a{
     grid-template-columns: auto;
 }
 
-#grid-page{
+#grid-page {
     display: grid;
     padding: 20px;
     margin: 20px;
@@ -48,12 +48,113 @@ a{
     justify-content: center;
 }
 
-.grid-item-header{
+.grid-item-header {
     padding: 20px;
 }
 
-.grid-item-page{
+.grid-item-page {
     height: 260px;
     padding: 20px;
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.botao {
+    color: rgb(77, 77, 77);
+    margin: 5px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: whitesmoke;
+}
+
+.nav-bar a {
+    color: white;
+    margin: 5px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+}
+
+.nav-bar a:hover {
+    color: white;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+}
+
+main {
+    background-color: whitesmoke;
+    flex: 1;
+}
+
+aside {
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+    width: 20vw;
+}
+
+aside h3 {
+    text-align: center;
+    margin: 20px 10px 20px 10px;
+    padding: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+input[type=text] {
+    width: 50px;
+}
+
+#head {
+    background-color: white;
+}
+
+#head p {
+    padding: 10px;
+}
+
+/* dropdown menu*/
+
+.wrapper {
+    display: none;
+}
+
+.wrapper.show {
+    display: block;
+}
+
+#grid-main {
+    background-color: white;
+    margin: 50px;
+    display: grid;
+    padding: 20px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-columns: auto;
+}
+
+.grid-item {
+    margin: 5px;
+    padding: 10px;
+    box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+.grid-item p {
+    text-align: left;
+}
+
+#Paginator {    
+    margin: 0 auto 0;
+    display: flex;
+}
+
+#Paginator input{
+    width: 50px;
+}
+
+#Paginator form, a{
+    margin: 5px 5px 0 5px;
 }

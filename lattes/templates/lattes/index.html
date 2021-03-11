@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Lattes</title>
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon">
 </head>
@@ -16,7 +17,7 @@
             <div class="grid-item-header">
                 <h1>LATTES UNESPAR</h1>
             </div>
-            <div class="grid-item-header"><img class="imagem" src="imagens/logo-lattesunespar-pequena.png"
+            <div class="grid-item-header"><img class="imagem" src="{% static 'imagens/logo-lattesunespar-pequena.png' %}"
                     alt="logo lattes unespar"></div>
         </div>
     </header>
@@ -29,7 +30,7 @@
                     <p>As pessoas da unespar que possuem um curriculo<br> cadastrado e informações sobre elas.</p>
                 </div>
             </a>
-            <a href="#">
+            <a href="{% url 'lattes:producoes' %}">
                 <div class="grid-item-page">
                     <h2>Produção</h2>
                     <p><i class="fa fa-book" style="font-size:120px"></i></p>
@@ -46,5 +47,4 @@
         </div>
     </div>
 </body>
-
 </html>
