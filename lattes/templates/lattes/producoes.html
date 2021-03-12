@@ -19,30 +19,46 @@
     <div id="Paginator">
         {% if Producao_page.has_previous %}
         <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fa fa-angle-double-left"></i></a>
-        <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i class="fa fa-angle-left"></i></a>
+        <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i
+                class="fa fa-angle-left"></i></a>
         {% endif %}
         <form method="GET">
-            <input type="number" name="page" placeholder="{{Producao_page.number}}"> / {{Producao_page.paginator.num_pages}}
+            <input type="number" name="page" placeholder="{{Producao_page.number}}"> /
+            {{Producao_page.paginator.num_pages}}
         </form>
         {% if Producao_page.has_next %}
-        <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i class="fa fa-angle-right"></i></a>
-        <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i class="fa fa-angle-double-right"></i></a>
+        <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i
+                class="fa fa-angle-right"></i></a>
+        <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i
+                class="fa fa-angle-double-right"></i></a>
         {% endif %}
     </div>
 </div>
 {% endblock %}
 {% block aside %}
-<div id="filtroAno">
-    <div class="drop-bnt">
-        <h3>Ano Produção <i class="fa fa-caret-down"></i></h3>
-    </div>
-    <div class="wrapper">
-        <p>A partir de: <input type="text"> até: <input type="text"></p>
-    </div>
-</div>
 <form method="GET">
-    {{producoes_filtradas.form}}
-    <input type="submit">
+    <div id="filtroTitulo">
+        <h3>Titulo <i class="fa fa-caret-down"></i></h3>
+        <p>Titulo:{{producoes_filtradas.form.titulo__contains}}</p>
+    </div>
+    <div id="filtroAno">
+        <div class="drop-bnt">
+            <h3>Ano Produção <i class="fa fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>Ano partir de: {{producoes_filtradas.form.ano__gte}} até: {{producoes_filtradas.form.ano__lte}}</p>
+        </div>
+    </div>
+    <div id="filtroInformadoPor">
+        <h3>Informado Por <i class="fa fa-caret-down"></i></h3>
+        <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
+    </div>
+    <div id="filtroTipo">
+        <h3>Tipo <i class="fa fa-caret-down"></i></h3>
+        <p>Tipo:{{producoes_filtradas.form.tipo__contains}}</p>
+    </div>
+    <input type="submit" value="Buscar">
+    <a href="?" class="botao">Limpar</a>
 </form>
 <script>
     const drop_bnt = document.querySelector(".drop-bnt");

@@ -17,9 +17,17 @@ p, h2 {
     text-align: center;
 }
 
-a {
+nav a {
+    color: white;
+    margin: 5px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
     text-decoration: none;
-    color: black;
+}
+nav a:hover {
+    color: white;
 }
 
 .imagem {
@@ -58,30 +66,6 @@ a {
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-.botao {
-    color: rgb(77, 77, 77);
-    margin: 5px;
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: whitesmoke;
-}
-
-.nav-bar a {
-    color: white;
-    margin: 5px;
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    text-decoration: none;
-}
-
-.nav-bar a:hover {
-    color: white;
-}
-
 section {
     display: flex;
     flex-direction: row;
@@ -102,10 +86,6 @@ aside h3 {
     margin: 20px 10px 20px 10px;
     padding: 5px;
     box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-input[type=text] {
-    width: 50px;
 }
 
 #head {
@@ -158,3 +138,45 @@ input[type=text] {
 #Paginator form, a{
     margin: 5px 5px 0 5px;
 }
+
+#filtroAno input{
+    width: 60px;
+}
+
+#filtroInformadoPor input{
+    width: 180px;
+}
+
+aside input[type=submit]{
+    background-color: black;
+    color: white;
+    margin: 10px 0 0 10px;
+    width: 80px;
+    height: 35px;
+    border: 0px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+aside input[type=submit]:hover{
+    background-color: gray;
+    color: white;
+ }
+
+.botao:link, .botao:visited {
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 10px 0 0 10px;
+    border-radius: 5px;
+    width: 80px;
+    height: 35px;
+    padding-top: 5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .botao:hover{
+    background-color: gray;
+    color: white;
+ }
