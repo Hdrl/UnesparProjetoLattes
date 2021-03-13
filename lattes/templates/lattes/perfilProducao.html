@@ -1,0 +1,38 @@
+{% extends 'lattes/layout.html' %}
+
+{% block main %}
+<div id="grid-main">
+    <canvas id="myChart"></canvas>
+</div>
+<script>
+    var ctx = document.getElementById('myChart');
+    var defaultData = {{total}};
+    var labels = {{anos}};
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '# de Produção',
+                data: defaultData,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+{% endblock %}

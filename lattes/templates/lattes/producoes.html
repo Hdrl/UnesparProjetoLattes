@@ -36,10 +36,15 @@
 </div>
 {% endblock %}
 {% block aside %}
+<a href="{% url 'lattes:perfilProducao' %}">Perfil Produção</a>
 <form method="GET">
     <div id="filtroTitulo">
-        <h3>Titulo <i class="fa fa-caret-down"></i></h3>
-        <p>Titulo:{{producoes_filtradas.form.titulo__contains}}</p>
+        <div class="drop-bnt">
+            <h3>Titulo <i class="fa fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>Titulo:{{producoes_filtradas.form.titulo__contains}}</p>
+        </div>
     </div>
     <div id="filtroAno">
         <div class="drop-bnt">
@@ -50,22 +55,31 @@
         </div>
     </div>
     <div id="filtroInformadoPor">
-        <h3>Informado Por <i class="fa fa-caret-down"></i></h3>
-        <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
+        <div class="drop-bnt">
+            <h3>Informado Por <i class="fa fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
+        </div>
     </div>
     <div id="filtroTipo">
-        <h3>Tipo <i class="fa fa-caret-down"></i></h3>
-        <p>Tipo:{{producoes_filtradas.form.tipo__contains}}</p>
+        <div class="drop-bnt">
+            <h3>Tipo <i class="fa fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>Tipo:{{producoes_filtradas.form.tipo__contains}}</p>
+        </div>
     </div>
     <input type="submit" value="Buscar">
     <a href="?" class="botao">Limpar</a>
 </form>
 <script>
-    const drop_bnt = document.querySelector(".drop-bnt");
-    const wrapper = document.querySelector(".wrapper");
-
-    drop_bnt.onclick = (() => {
-        wrapper.classList.toggle("show");
-    });
+    function f(element, index){
+        element.onclick = (() => {
+            wrapper[index].classList.toggle("show");
+        });
+    }
+    const list = document.querySelectorAll('.drop-bnt').forEach(f);
+    const wrapper = document.querySelectorAll(".wrapper");
 </script>
 {% endblock %}
