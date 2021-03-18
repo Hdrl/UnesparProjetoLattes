@@ -5,8 +5,6 @@ from .filters import ProducaoFilter
 from django.db.models import Count
 
 # Create your views here.
-
-
 def index(request):
     return render(request, "lattes/index.html")
 
@@ -30,8 +28,15 @@ def producoes(request):
 
 
 def perfilProducao(request):
-    context ={}
-    query = Producao.objects.values('ano').annotate(total=Count('id')).order_by('ano')
+    context = {}
+
+    producoes_filtradas = ProducaoFilter(
+        request.GET,
+        queryset=Producao.objects.all()
+    )
+
+    query = producoes_filtradas.qs.values('ano').annotate(total=Count('id')).order_by('ano')
     context['anos'] = [dic['ano'] for dic in query]
     context['total'] = [dic['total'] for dic in query]
+    context["producoes_filtradas"] = producoes_filtradas
     return render(request, "lattes/perfilProducao.html", context)

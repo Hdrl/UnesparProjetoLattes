@@ -18,9 +18,9 @@
     {% endfor %}
     <div id="Paginator">
         {% if Producao_page.has_previous %}
-        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fa fa-angle-double-left"></i></a>
+        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fas fa-angle-double-left"></i></a>
         <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i
-                class="fa fa-angle-left"></i></a>
+                class="fas fa-angle-left"></i></a>
         {% endif %}
         <form method="GET">
             <input type="number" name="page" placeholder="{{Producao_page.number}}"> /
@@ -28,38 +28,22 @@
         </form>
         {% if Producao_page.has_next %}
         <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i
-                class="fa fa-angle-right"></i></a>
+                class="fas fa-angle-right"></i></a>
         <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i
-                class="fa fa-angle-double-right"></i></a>
+                class="fas fa-angle-double-right"></i></a>
         {% endif %}
     </div>
 </div>
 {% endblock %}
 {% block aside %}
-<a href="{% url 'lattes:perfilProducao' %}">Perfil Produção</a>
+<h2><i class="fas fa-search"></i> Filtros</h2>
 <form method="GET">
     <div id="filtroTitulo">
         <div class="drop-bnt">
-            <h3>Titulo <i class="fa fa-caret-down"></i></h3>
+            <h3>Titulo <i class="fas fa-caret-down"></i></h3>
         </div>
         <div class="wrapper">
             <p>Titulo:{{producoes_filtradas.form.titulo__contains}}</p>
-        </div>
-    </div>
-    <div id="filtroAno">
-        <div class="drop-bnt">
-            <h3>Ano Produção <i class="fa fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>Ano partir de: {{producoes_filtradas.form.ano__gte}} até: {{producoes_filtradas.form.ano__lte}}</p>
-        </div>
-    </div>
-    <div id="filtroInformadoPor">
-        <div class="drop-bnt">
-            <h3>Informado Por <i class="fa fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
         </div>
     </div>
     <div id="filtroTipo">
@@ -70,11 +54,30 @@
             <p>Tipo:{{producoes_filtradas.form.tipo__contains}}</p>
         </div>
     </div>
+    <div id="filtroAno">
+        <div class="drop-bnt">
+            <h3>Ano Produção <i class="fas fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>Ano partir de: {{producoes_filtradas.form.ano__gte}} até:
+                {{producoes_filtradas.form.ano__lte}}</p>
+        </div>
+    </div>
+    <div id="filtroInformadoPor">
+        <div class="drop-bnt">
+            <h3>Informado Por <i class="fas fa-caret-down"></i></h3>
+        </div>
+        <div class="wrapper">
+            <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
+        </div>
+    </div>
+
     <input type="submit" value="Buscar">
     <a href="?" class="botao">Limpar</a>
+
 </form>
 <script>
-    function f(element, index){
+    function f(element, index) {
         element.onclick = (() => {
             wrapper[index].classList.toggle("show");
         });
