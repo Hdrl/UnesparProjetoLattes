@@ -2,33 +2,139 @@
 
 {% block main %}
 <div id="grid-main">
-    <canvas id="myChart"></canvas>
+    <canvas id="ChartAno"></canvas>
+    <canvas id="ChartBibligrafico"></canvas>
+    <canvas id="ChartTecnico"></canvas>
+    <canvas id="ChartArtistico"></canvas>
+    <canvas id="ChartEvento"></canvas>
+    <canvas id="ChartOrientacao"></canvas>
 </div>
 <script>
-    var ctx = document.getElementById('myChart');
-    var defaultData = {{ total }};
-    var labels = {{ anos }};
-    var myChart = new Chart(ctx, {
+    var ctx = document.getElementById('ChartAno');
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
-            datasets: [{
-                label: '# de Produção',
-                data: defaultData,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+            labels: {{ anos }},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalAno }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
             }]
         },
         options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+        tooltips: {
+            callbacks: {
+                title: function (tooltipItems, data) {
+                    return data.labels[tooltipItems[0].index]
+                }
+            }
+        },
+        title: { display: true, text: 'Distribuição de produção por ano' },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    autoSkipPadding: 11,
+                    maxRotation: 90,
+                    minRotation: 0
+                }
+            }]
+        }
+    }
+    });
+    Chart.scaleService.updateScaleDefaults('category', {
+        ticks: {
+            callback: function (tick) {
+
+                return tick.substring(0, 15) + "...";
             }
         }
+    });
+    new Chart(document.getElementById('ChartBibligrafico'), {
+        type: 'bar',
+        data: {
+            labels: {% autoescape off %}{{ tiposB }}{% endautoescape %},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalTipoB }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+            }]
+        },
+        options: {
+        title: { display: true, text: 'Distribuição por tipo de produção bibliográfico' },
+    }
+    });
+    new Chart(document.getElementById('ChartTecnico'), {
+        type: 'bar',
+        data: {
+            labels: {% autoescape off %}{{ tiposT }}{% endautoescape %},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalTipoT }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+            }]
+        },
+        options: {
+        title: { display: true, text: 'Distribuição por tipo de produção técnica' },
+    }
+    });
+    new Chart(document.getElementById('ChartOrientacao'), {
+        type: 'bar',
+        data: {
+            labels: {% autoescape off %}{{ tiposO }}{% endautoescape %},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalTipoO }},
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+            }],
+        },
+        options: {
+        title: { display: true, text: 'Distribuição por tipo de produção orientação em andamento' },
+    }
+    });
+    new Chart(document.getElementById('ChartArtistico'), {
+        type: 'bar',
+        data: {
+            labels: {% autoescape off %}{{ tiposA }}{% endautoescape %},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalTipoA }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+            }]
+        },
+        options: {
+        title: { display: true, text: 'Distribuição por tipo de produção artística/cultural' },
+    }
+    });
+    new Chart(document.getElementById('ChartEvento'), {
+        type: 'bar',
+        data: {
+            labels: {% autoescape off %}{{ tiposE }}{% endautoescape %},
+        datasets: [{
+            label: '# de Produção',
+            data: {{ totalTipoE }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+            }]
+        },
+        options: {
+        title: { display: true, text: 'Distribuição por tipo de produção banca, evento ou outro tipo de produção' },
+    }
     });
 </script>
 {% endblock %}
