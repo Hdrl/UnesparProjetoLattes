@@ -8,9 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Projeto Lattes</title>
     <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
-    <link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'imagens/favicon.ico' %}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
                     <div class="logo"><img src="{% static 'imagens/icone-lattesunespar.png' %}"
                             alt="logo lattes unespar"></div>
                     <ul class="links">
-                        <li><a href="{% url 'index' %}">Início</a></li>
+                        <li><a href="{% url 'lattes:index' %}">Início</a></li>
                         <li><a href="#">Pessoas</a></li>
                         <li>
                             <a href="" class="desktop-link">Produções</a>
@@ -37,6 +37,29 @@
                         <li><a href="#">Projetos</a></li>
                     </ul>
                 </div>
+                <div>
+                    <div class="user-icon"><i class="fas fa-user-circle"
+                            style="color: white;width:30px;height:30px;"></i><p>{{request.user.username}}</p>
+                    </div>
+                    <div class="user-page">
+                        <ul>
+                            <li><a href="{% url 'lattes:logout' %}">
+                                    <div class="icon">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </div>
+                                    Sair
+                                </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <script>
+                    const usericon = document.querySelector(".user-icon");
+                    const userpage = document.querySelector(".user-page");
+
+                    usericon.onclick = (() => {
+                        userpage.classList.toggle("show");
+                    });
+                </script>
             </nav>
         </div>
     </header>

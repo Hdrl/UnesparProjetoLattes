@@ -10,4 +10,4 @@ class ProducaoFilter(django_filters.FilterSet):
             'tipoAgrupador': ['contains'],
             'informadoPor': ['contains'],
             'titulo': ['contains']
-        } 
+        }

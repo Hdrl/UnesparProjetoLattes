@@ -20,5 +20,5 @@ from lattes import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('lattes/', include("lattes.urls")),
-    path('', views.index, name="index")
+    path('', views.login_view, name="login")
 ]

@@ -1,14 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from .models import Producao
 from .filters import ProducaoFilter
-from django.db.models import Count, Q
 
 # Create your views here.
+@login_required
 def index(request):
     return render(request, "lattes/index.html")
 
-
+@login_required
 def producoes(request):
     context = {}
 
@@ -26,7 +30,7 @@ def producoes(request):
     context["length"] = len(producoes_filtradas.qs)
     return render(request, "lattes/producoes.html", context)
 
-
+@login_required
 def perfilProducao(request):
     context = {}
 
@@ -61,3 +65,22 @@ def perfilProducao(request):
 
     context["producoes_filtradas"] = producoes_filtradas
     return render(request, "lattes/perfilProducao.html", context)
+
+def login_view(request):
+    if request.method == "POST":
+        username=request.POST["username"]
+        password=request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("lattes:index"))
+        else:
+            return render(request, "lattes/login.html",{
+                "message":"usuário ou senha errado."
+            })
+    return render(request, "lattes/login.html")
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return render(request, "lattes/login.html")
