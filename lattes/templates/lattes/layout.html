@@ -9,13 +9,14 @@
     <title>Projeto Lattes</title>
     <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
     <link rel="shortcut icon" href="{% static 'imagens/favicon.ico' %}" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
     <header>
-        <div class="container">
+        <div class="Header">
             <nav>
                 <input type="checkbox" id="show-menu">
                 <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
