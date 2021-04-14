@@ -7,73 +7,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Projeto Lattes</title>
-    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
     <link rel="shortcut icon" href="{% static 'imagens/favicon.ico' %}" type="image/x-icon">
-    <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/testEstilo.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-replace-svg="nest"></script>
     {% block head %}
     {% endblock %}
 </head>
 
 <body>
-    <header>
-        <div class="Header">
-            <nav>
-                <input type="checkbox" id="show-menu">
-                <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
-                <div class="content">
-                    <div class="logo"><img src="{% static 'imagens/icone-lattesunespar.png' %}"
-                            alt="logo lattes unespar"></div>
-                    <ul class="links">
-                        <li><a href="{% url 'lattes:index' %}">Início</a></li>
-                        <li><a href="#">Pessoas</a></li>
-                        <li>
-                            <a href="" class="desktop-link">Produções</a>
-                            <input type="checkbox" id="show-features">
-                            <label for="show-features">Produções</label>
-                            <ul>
-                                <li><a href="{% url 'lattes:producoes' %}">Quais produções?</a></li>
-                                <li><a href="{% url 'lattes:perfilProducao' %}">Qual perfil produções?</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Projetos</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <div class="user-icon"><i class="fas fa-user-circle"
-                            style="color: white;width:30px;height:30px;"></i><p>{{request.user.username}}</p>
-                    </div>
-                    <div class="user-page">
-                        <ul>
-                            <li><a href="{% url 'lattes:logout' %}">
-                                    <div class="icon">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                    </div>
-                                    Sair
-                                </a></li>
+    <div class="content">
+        <aside class="sidebar">
+            <a href="#" class="sidebar-logo"><img src="{% static 'imagens/sidebar-logo-lattesunespar.png' %}" alt="logo lattes unespar">Lattes Unespar</a>
+            <nav class="links">
+                <ul>
+                    <li>
+                        <a href="{% url 'lattes:index' %}">
+                            <i class="fas fa-home"></i>
+                            Início
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-friends"></i>
+                            Pessoas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="drop-bnt">
+                            <i class="fas fa-book"></i>
+                            Produção
+                            <i class="fas fa-angle-down"></i>
+                        </a>
+                        <ul class="wrapper">
+                            <li>
+                                <a href="{% url 'lattes:producoes' %}">
+                                    <i class="fas fa-search"></i>
+                                    Quais produções?
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lattes:perfilProducao' %}">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Qual perfil produções?
+                                </a>
+                            </li>
                         </ul>
-                    </div>
-                </div>
-                <script>
-                    const usericon = document.querySelector(".user-icon");
-                    const userpage = document.querySelector(".user-page");
-
-                    usericon.onclick = (() => {
-                        userpage.classList.toggle("show");
-                    });
-                </script>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-calendar"></i>
+                            Projeto
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="drop-bnt">
+                            <i class="fas fa-search"></i>
+                            Filtros
+                            <i class="fas fa-angle-down"></i>
+                        </a>
+                        <ul class="wrapper" id="filtros">
+                            <form method="GET">
+                                <li>
+                                    <div class="drop-bnt">
+                                        Titulo <i class="fas fa-angle-down"></i>
+                                    </div>
+                                    <div class="wrapper">
+                                        Titulo:{{producoes_filtradas.form.titulo__contains}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="drop-bnt">
+                                        Tipo <i class="fa fa-angle-down"></i>
+                                    </div>
+                                    <div class="wrapper">
+                                        Tipo:{{producoes_filtradas.form.tipo__contains}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="drop-bnt">
+                                        Ano Produção <i class="fas fa-angle-down"></i>
+                                    </div>
+                                    <div class="wrapper" id="filtroAno">
+                                        Ano partir de: {{producoes_filtradas.form.ano__gte}} até:
+                                        {{producoes_filtradas.form.ano__lte}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="drop-bnt">
+                                        Informado Por <i class="fas fa-angle-down"></i>
+                                    </div>
+                                    <div class="wrapper">
+                                        informado por:{{producoes_filtradas.form.informadoPor__contains}}
+                                    </div>
+                                </li>
+                                <div class="submit">
+                                    <input type="submit" value="Buscar" class="btn btn-light">
+                                    <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
+                                </div>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
             </nav>
-        </div>
-    </header>
-    <section>
-        <main>
-            {% block main %}
-            {% endblock %}
-        </main>
-        <aside>
-            {% block aside %}
-            {% endblock %}
         </aside>
-    </section>
-</body>
+        <div class="main">
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <div class="drop-btn-sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                    </svg>
+                </div>
 
+                <div class="drop-bnt" id="user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                    {{request.user.username}}
+                    <i class="fas fa-angle-down"></i>
+                </div>
+                <div class="wrapper" id="user-page">
+                    <ul class="user-item-list">
+                        <li>
+                            <a href="{% url 'lattes:logout' %}"><i class="fas fa-sign-out-alt"></i>Sair</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+            <main>
+                {% block main %}
+                {% endblock %}
+            </main>
+        </div>
+        <script>
+            function Limpar(){
+                window.location.href = window.location.href.split('?')[0];
+            }
+            function f(element, index) {
+                element.onclick = (() => {
+                    wrapper[index].classList.toggle("show");
+                    element.classList.toggle("rotate");
+                });
+            }
+            const list = document.querySelectorAll('.drop-bnt').forEach(f);
+            const wrapper = document.querySelectorAll(".wrapper");
+
+            const btn_sidebar = document.querySelector('.drop-btn-sidebar');
+            const sidebar = document.querySelector('.sidebar'); 
+
+            btn_sidebar.onclick = (() => {
+                sidebar.classList.toggle("hide");
+            });
+        </script>
+</body>
 </html>

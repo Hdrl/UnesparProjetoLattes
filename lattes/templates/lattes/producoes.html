@@ -1,86 +1,51 @@
 {% extends 'lattes/layout.html' %}
-{% block main %}
 {% load lattes_extras %}
-<div id="head">
-    <p>Foram encontrados {{length}} resultados</p>
+
+{% block main %}
+<div class="container-fluid p-0">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="h3 mb-3">Produções</h1>
+                    <p style="text-align: center;">Foram encontrados {{length}} resultados</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for producao in Producao_page %}
+                        <li class="list-group-item">
+                            <p>
+                                Titulo: <b>{{ producao.titulo }}</b> <br>
+                                Tipo: {{producao.tipo }} <br>
+                                Tipo Agrupador: {{ producao.tipoAgrupador }} <br>
+                                Informado por: {{ producao.informadoPor }} <br>
+                                Ano: {{ producao.ano }}
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="paginator">
+                        {% if Producao_page.has_previous %}
+                        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fas fa-angle-double-left"></i></a>
+                        <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-left"></i></a>
+                        {% endif %}
+                        <form method="GET">
+                            <input type="number" name="page" placeholder="{{Producao_page.number}}"> /
+                            {{Producao_page.paginator.num_pages}}
+                        </form>
+                        {% if Producao_page.has_next %}
+                        <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-right"></i></a>
+                        <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-double-right"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="grid-main">
-    {% for producao in Producao_page %}
-    <div class="grid-item">
-        <p>
-            Titulo: <b>{{ producao.titulo }}</b> <br>
-            Tipo: {{producao.tipo }} <br>
-            Tipo Agrupador: {{ producao.tipoAgrupador }} <br>
-            Informado por: {{ producao.informadoPor }} <br>
-            Ano: {{ producao.ano }}
-        </p>
-    </div>
-    {% endfor %}
-    <div id="Paginator">
-        {% if Producao_page.has_previous %}
-        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i class="fas fa-angle-double-left"></i></a>
-        <a href="{% my_url Producao_page.previous_page_number 'page' request.GET.urlencode %}"><i
-                class="fas fa-angle-left"></i></a>
-        {% endif %}
-        <form method="GET">
-            <input type="number" name="page" placeholder="{{Producao_page.number}}"> /
-            {{Producao_page.paginator.num_pages}}
-        </form>
-        {% if Producao_page.has_next %}
-        <a href="{% my_url Producao_page.next_page_number 'page' request.GET.urlencode %}"><i
-                class="fas fa-angle-right"></i></a>
-        <a href="{% my_url Producao_page.paginator.num_pages 'page' request.GET.urlencode %}"><i
-                class="fas fa-angle-double-right"></i></a>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
-{% block aside %}
-<h2><i class="fas fa-search"></i> Filtros</h2>
-<form method="GET">
-    <div id="filtroTitulo">
-        <div class="drop-bnt">
-            <h3>Titulo <i class="fas fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>Titulo:{{producoes_filtradas.form.titulo__contains}}</p>
-        </div>
-    </div>
-    <div id="filtroTipo">
-        <div class="drop-bnt">
-            <h3>Tipo <i class="fa fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>Tipo:{{producoes_filtradas.form.tipo__contains}}</p>
-        </div>
-    </div>
-    <div id="filtroAno">
-        <div class="drop-bnt">
-            <h3>Ano Produção <i class="fas fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>Ano partir de: {{producoes_filtradas.form.ano__gte}} até:
-                {{producoes_filtradas.form.ano__lte}}</p>
-        </div>
-    </div>
-    <div id="filtroInformadoPor">
-        <div class="drop-bnt">
-            <h3>Informado Por <i class="fas fa-caret-down"></i></h3>
-        </div>
-        <div class="wrapper">
-            <p>informado por:{{producoes_filtradas.form.informadoPor__contains}}</p>
-        </div>
-    </div>
-    <input type="submit" value="Buscar">
-    <a href="?" class="botao">Limpar</a>
-</form>
-<script>
-    function f(element, index) {
-        element.onclick = (() => {
-            wrapper[index].classList.toggle("show");
-        });
-    }
-    const list = document.querySelectorAll('.drop-bnt').forEach(f);
-    const wrapper = document.querySelectorAll(".wrapper");
-</script>
 {% endblock %}
