@@ -4,13 +4,31 @@ from django.db.models import Count, Q
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .models import Producao
-from .filters import ProducaoFilter
+from .models import Producao, Pessoas
+from .filters import ProducaoFilter, PessoasFilter
 
 # Create your views here.
 @login_required
 def index(request):
     return render(request, "lattes/index.html")
+
+@login_required
+def pessoas(request):
+    context = {}
+
+    pessoas_filtradas = PessoasFilter(
+        request.GET,
+        queryset=Pessoas.objects.all()
+    )
+    p = Paginator(pessoas_filtradas.qs, 10)
+    page_number = request.GET.get('page')
+    Pessoas_page = p.get_page(page_number)
+
+    context["Pessoas_page"] = Pessoas_page
+    context["pessoas_filtradas"] = pessoas_filtradas
+    context["length"] = len(pessoas_filtradas.qs)
+
+    return render(request, "lattes/pessoas/pessoas.html")
 
 @login_required
 def producoes(request):
