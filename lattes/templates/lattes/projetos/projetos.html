@@ -16,6 +16,7 @@
                         <li class="list-group-item">
                             <h2 style="font-size: 1.3rem;"><b>{{ projeto.nome | title }}</b></h2>
                             <p style="font-size: 1rem;color: rgb(93, 92, 93);">
+                                Projeto de {{ projeto.tipo | lower }} {{ projeto.situacao | lower}}, iniciado em {{ projeto.anoInicio }} <br>
                                 Coordenador por {{ projeto.coordenador }} <br>
                                 Informado por {{ projeto.informadoPor }} <br>
                             </p>
