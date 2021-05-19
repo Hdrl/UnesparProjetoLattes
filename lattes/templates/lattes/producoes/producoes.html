@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h1 class="h3 mb-3">Produções</h1>
-                    <p style="text-align: center;">Foram encontrados {{length}} resultados</p>
+                    <p style="text-align: center;">Foram encontrados {{producoes_filtradas.qs | length}} resultados</p>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
@@ -48,4 +48,46 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block filtro %}
+<form method="GET">
+    <li>
+        <div class="drop-bnt">
+            Titulo <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Titulo:{{producoes_filtradas.form.titulo__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Tipo <i class="fa fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Tipo:{{producoes_filtradas.form.tipo__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Ano Produção <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper" id="filtroAno">
+            Ano partir de: {{producoes_filtradas.form.ano__gte}} até:
+            {{producoes_filtradas.form.ano__lte}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Informado Por <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            informado por:{{producoes_filtradas.form.informadoPor__contains}}
+        </div>
+    </li>
+    <div class="submit">
+        <input type="submit" value="Buscar" class="btn btn-light">
+        <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
+    </div>
+</form>
 {% endblock %}

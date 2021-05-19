@@ -1,0 +1,107 @@
+{% extends 'lattes/layout.html' %}
+{% load lattes_extras %}
+
+{% block main %}
+<div class="container-fluid p-0">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="h3 mb-3">Projetos</h1>
+                    <p style="text-align: center;">Foram encontrados {{projetos_filtradas.qs | length}} resultados</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for projeto in projeto_page %}
+                        <li class="list-group-item">
+                            <h2 style="font-size: 1.3rem;"><b>{{ projeto.nome | title }}</b></h2>
+                            <p style="font-size: 1rem;color: rgb(93, 92, 93);">
+                                Coordenador por {{ projeto.coordenador }} <br>
+                                Informado por {{ projeto.informadoPor }} <br>
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="paginator">
+                        {% if projeto_page.has_previous %}
+                        <a href="{% my_url 1 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-double-left"></i></a>
+                        <a href="{% my_url projeto_page.previous_page_number 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-left"></i></a>
+                        {% endif %}
+                        <form method="GET">
+                            <input type="number" name="page" placeholder="{{projeto_page.number}}"> /
+                            {{projeto_page.paginator.num_pages}}
+                        </form>
+                        {% if projeto_page.has_next %}
+                        <a href="{% my_url projeto_page.next_page_number 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-right"></i></a>
+                        <a href="{% my_url projeto_page.paginator.num_pages 'page' request.GET.urlencode %}"><i
+                                class="fas fa-angle-double-right"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block filtro %}
+<form method="GET">
+    <li>
+        <div class="drop-bnt">
+            Nome <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Nome:{{projetos_filtradas.form.nome__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Ano Inicio <i class="fa fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Ano Inicio:{{projetos_filtradas.form.anoInicio__exact}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Situacao <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper" id="filtroAno">
+            Situacao: {{projetos_filtradas.form.situacao__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Tipo <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Tipo:{{projetos_filtradas.form.tipo__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Coordenador <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            Coordenador:{{projetos_filtradas.form.coordenador__contains}}
+        </div>
+    </li>
+    <li>
+        <div class="drop-bnt">
+            Informado Por <i class="fas fa-angle-down"></i>
+        </div>
+        <div class="wrapper">
+            informado por:{{projetos_filtradas.form.informadoPor__contains}}
+        </div>
+    </li>
+    <div class="submit">
+        <input type="submit" value="Buscar" class="btn btn-light">
+        <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
+    </div>
+</form>
+{% endblock %}

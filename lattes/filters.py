@@ -1,5 +1,5 @@
 import django_filters
-from .models import Producao, Pessoas
+from .models import Producao, Pessoas, Projeto
 
 class ProducaoFilter(django_filters.FilterSet):
     class Meta:
@@ -21,6 +21,18 @@ class PessoasFilter(django_filters.FilterSet):
         'tipoVinculo': ['contains'],
         'formacao': ['contains'],
         'instituicaoEmQueSeFormou': ['contains'],
-        'anoQueIngressouNoCampus': ['exacts']      
-   
+        'anoQueIngressouNoCampus': ['exact']      
     }
+
+class ProjetoFilter(django_filters.FilterSet):
+    class Meta:
+        model = Projeto
+        fields = {
+            'nome': ['contains'],
+            'idCurriculo': ['contains'],
+            'anoInicio': ['exact'],
+            'situacao': ['contains'],
+            'tipo': ['contains'],
+            'coordenador': ['contains'],
+            'informadoPor': ['contains']
+        }

@@ -57,7 +57,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{% url 'lattes:projetos' %}">
                             <i class="fas fa-calendar"></i>
                             Projeto
                         </a>
@@ -68,46 +68,9 @@
                             Filtros
                             <i class="fas fa-angle-down"></i>
                         </a>
-                        <ul class="wrapper" id="filtros">
-                            <form method="GET">
-                                <li>
-                                    <div class="drop-bnt">
-                                        Titulo <i class="fas fa-angle-down"></i>
-                                    </div>
-                                    <div class="wrapper">
-                                        Titulo:{{producoes_filtradas.form.titulo__contains}}
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="drop-bnt">
-                                        Tipo <i class="fa fa-angle-down"></i>
-                                    </div>
-                                    <div class="wrapper">
-                                        Tipo:{{producoes_filtradas.form.tipo__contains}}
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="drop-bnt">
-                                        Ano Produção <i class="fas fa-angle-down"></i>
-                                    </div>
-                                    <div class="wrapper" id="filtroAno">
-                                        Ano partir de: {{producoes_filtradas.form.ano__gte}} até:
-                                        {{producoes_filtradas.form.ano__lte}}
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="drop-bnt">
-                                        Informado Por <i class="fas fa-angle-down"></i>
-                                    </div>
-                                    <div class="wrapper">
-                                        informado por:{{producoes_filtradas.form.informadoPor__contains}}
-                                    </div>
-                                </li>
-                                <div class="submit">
-                                    <input type="submit" value="Buscar" class="btn btn-light">
-                                    <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
-                                </div>
-                            </form>
+                        <ul class="wrapper show" id="filtros">
+                            {% block filtro %}
+                            {% endblock %}
                         </ul>
                     </li>
                 </ul>

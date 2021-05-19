@@ -4,8 +4,8 @@ from django.db.models import Count, Q
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .models import Producao, Pessoas
-from .filters import ProducaoFilter, PessoasFilter
+from .models import Producao, Pessoas, Projeto
+from .filters import ProducaoFilter, PessoasFilter, ProjetoFilter
 
 # Create your views here.
 @login_required
@@ -45,8 +45,8 @@ def producoes(request):
 
     context["Producao_page"] = Producao_page
     context["producoes_filtradas"] = producoes_filtradas
-    context["length"] = len(producoes_filtradas.qs)
-    return render(request, "lattes/producoes.html", context)
+
+    return render(request, "lattes/producoes/producoes.html", context)
 
 @login_required
 def perfilProducao(request):
@@ -82,7 +82,25 @@ def perfilProducao(request):
     context['totalTipoE'] = [dic['total'] for dic in query]
 
     context["producoes_filtradas"] = producoes_filtradas
-    return render(request, "lattes/perfilProducao.html", context)
+    return render(request, "lattes/producoes/perfilProducao.html", context)
+
+@login_required
+def projetos(request):
+    context = {}
+
+    projetos_filtradas = ProjetoFilter(
+        request.GET,
+        queryset=Projeto.objects.all()
+    )
+
+    p = Paginator(projetos_filtradas.qs, 10)
+    page_number = request.GET.get('page')
+    projeto_page = p.get_page(page_number)
+
+    context["projeto_page"] = projeto_page
+    context["projetos_filtradas"] = projetos_filtradas
+
+    return render(request, "lattes/projetos/projetos.html", context)
 
 def login_view(request):
     if request.method == "POST":
