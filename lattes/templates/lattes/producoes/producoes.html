@@ -15,7 +15,7 @@
                         {% for producao in Producao_page %}
                         <li class="list-group-item">
                             <p>
-                                Titulo: <b>{{ producao.titulo }}</b> <br>
+                                Titulo: <b>{{ producao.titulo | title}}</b> <br>
                                 Tipo: {{producao.tipo }} <br>
                                 Tipo Agrupador: {{ producao.tipoAgrupador }} <br>
                                 Informado por: {{ producao.informadoPor }} <br>

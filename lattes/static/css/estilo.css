@@ -1,7 +1,7 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Poppins,Helvetica Neue,Arial,sans-serif;
+    font-family: sans-serif, Poppins,Helvetica Neue,Arial;
 }
 
 body{
@@ -43,7 +43,7 @@ main {
 .main{
     display: flex;
     flex-direction: column;
-    background-color: #f7f9fc;
+    background-color: #fff;
     margin-left: 260px;
     width: 100%;
     min-height: 100vh;
@@ -105,7 +105,7 @@ main {
     width: 20px;
 }
 
-.links li{
+.links li, #filtros{
     direction: inherit;
     box-sizing: border-box!important;
     position: relative;
@@ -114,20 +114,37 @@ main {
     width: auto;
     max-width: 100%;
     max-height: 100%;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.links .link-title{
+    min-height: 20px;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 0 5px 0 12px;
+    margin: 0;
+}
+
+.links a:hover{
+    background-color: var(--bs-gray-dark);
 }
 
 .sidebar {
     position: fixed;
-    background-color: #293042;
+    background-color: #292929;
     color: white;
     width: 260px;
     height: 100vh;
-    transition: display 4s;
+    overflow: auto;
 }
 
+.navlink.w--current { background-color: var(--default);}
+
 .sidebar-logo{
-    font-weight: 700;
-    font-size: 1.125rem;
+    font-weight: 500;
+    font-size: 1.5rem;
     padding: 1.15rem 1.5rem;
     display: block;
     text-align: center;
@@ -146,7 +163,6 @@ main {
 
 .wrapper {
     display: none;
-    font-size: .800rem;
 }
 
 .wrapper.show {
@@ -171,13 +187,16 @@ main {
 .links a,#filtros .drop-bnt{
     display: block;
     padding: .625rem 1.625rem;
+    cursor: pointer;
 }
 
 #filtros .submit,#filtros .wrapper.wrapper.show{
     margin: .625rem 1.625rem;
+
 }
-#filtros .btn{
-    font-size: .800rem;
+
+.submit input, .submit button{
+    font-size: 13px;
 }
 
 #user-page{

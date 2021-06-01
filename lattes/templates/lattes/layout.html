@@ -24,27 +24,28 @@
             <nav class="links">
                 <ul>
                     <li>
-                        <a href="{% url 'lattes:index' %}">
-                            <i class="fas fa-home"></i>
-                            Início
-                        </a>
+                        <div class="link-title">Pessoas</div>
+                        <ul>
+                            <li>
+                                <a href="{% url 'lattes:pessoas' %}">
+                                    <i class="fas fa-user-friends"></i>
+                                    Quais pessoas?
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lattes:perfilProducao' %}">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Qual perfil pessoas?
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <a href="{% url 'lattes:pessoas' %}">
-                            <i class="fas fa-user-friends"></i>
-                            Pessoas
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="drop-bnt">
-                            <i class="fas fa-book"></i>
-                            Produção
-                            <i class="fas fa-angle-down"></i>
-                        </a>
-                        <ul class="wrapper">
+                        <div class="link-title">Produção</div>
+                        <ul>
                             <li>
                                 <a href="{% url 'lattes:producoes' %}">
-                                    <i class="fas fa-search"></i>
+                                    <i class="fas fa-book"></i>
                                     Quais produções?
                                 </a>
                             </li>
@@ -57,18 +58,25 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{% url 'lattes:projetos' %}">
-                            <i class="fas fa-calendar"></i>
-                            Projeto
-                        </a>
+                        <div class="link-title">Projeto</div>
+                        <ul>
+                            <li>
+                                <a href="{% url 'lattes:projetos' %}">
+                                    <i class="fas fa-calendar"></i>
+                                    Quais projetos?
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lattes:perfilProducao' %}">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Qual perfil projetos?
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <a href="#" class="drop-bnt">
-                            <i class="fas fa-search"></i>
-                            Filtros
-                            <i class="fas fa-angle-down"></i>
-                        </a>
-                        <ul class="wrapper show" id="filtros">
+                        <div class="link-title">Filtros</div>
+                        <ul id="filtros">
                             {% block filtro %}
                             {% endblock %}
                         </ul>
