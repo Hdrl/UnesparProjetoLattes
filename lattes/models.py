@@ -1,7 +1,8 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
+from django.db.models.fields import CharField
 
 # Create your models here.
-
 
 class Producao(models.Model):
     ano = models.IntegerField()
@@ -9,6 +10,9 @@ class Producao(models.Model):
     tipo = models.CharField(max_length=255)
     tipoAgrupador = models.CharField(max_length=255)
     titulo = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return f"TITULO = {self.titulo}, ANO = {self.ano}, INFORMADOPOR = {self.informadoPor}"
 
 class Pessoas(models.Model):
     nome = models.CharField(max_length=255)
@@ -19,6 +23,31 @@ class Pessoas(models.Model):
     instituicaoEmQueSeFormou = models.CharField(max_length=255)
     anoQueIngressouNoCampus = models.IntegerField()
     descricao = models.CharField(max_length=255)
+
+class SetorAtividade(models.Model):
+    setor = models.CharField(max_length=45)
+    producao_id = models.ForeignKey(Producao, on_delete=models.CASCADE, related_name="setores_atividade")
+
+class PalavraChave(models.Model):
+    palavra = models.CharField(max_length=45)
+    producao_id = models.ForeignKey(Producao, on_delete=models.CASCADE, related_name="palavrasChave")
+
+class AreaConhecimento(models.Model):
+    grandeArea = models.CharField(max_length=45)
+    area = models.CharField(max_length=45)
+    subArea = models.CharField(max_length=45)
+    especialidade = models.CharField(max_length=45)
+    producao_id = models.ForeignKey(Producao, on_delete=models.CASCADE, related_name="areas_conhecimento")
+
+class Autor(models.Model):
+    nomeCompleto = models.CharField(max_length=45)
+    nomeCitacao = models.CharField(max_length=45)
+    idCNPQ = models.CharField(max_length=45)
+
+class ProducaoAutor(models.Model):
+    producao_id = models.ForeignKey(Producao, on_delete=models.CASCADE, related_name = "producoes")
+    autor_id = models.ForeignKey(Autor, on_delete=models.CASCADE, related_name= "Autores")
+    ordemAutoria = models.CharField(max_length=45)
 
 class Projeto(models.Model):
     nome = models.CharField(max_length=50)

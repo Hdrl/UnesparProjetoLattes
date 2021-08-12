@@ -9,10 +9,10 @@
     <title>Projeto Lattes</title>
     <link rel="shortcut icon" href="{% static 'imagens/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-replace-svg="nest"></script>
+    <script src="{% static 'js/layout.js' %}"></script>
     {% block head %}
     {% endblock %}
 </head>
@@ -30,12 +30,6 @@
                                 <a href="{% url 'lattes:pessoas' %}">
                                     <i class="fas fa-user-friends"></i>
                                     Quais pessoas?
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'lattes:perfilProducao' %}">
-                                    <i class="fas fa-chart-bar"></i>
-                                    Qual perfil pessoas?
                                 </a>
                             </li>
                         </ul>
@@ -64,12 +58,6 @@
                                 <a href="{% url 'lattes:projetos' %}">
                                     <i class="fas fa-calendar"></i>
                                     Quais projetos?
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'lattes:perfilProducao' %}">
-                                    <i class="fas fa-chart-bar"></i>
-                                    Qual perfil projetos?
                                 </a>
                             </li>
                         </ul>
@@ -118,25 +106,5 @@
                 {% endblock %}
             </main>
         </div>
-        <script>
-            function Limpar(){
-                window.location.href = window.location.href.split('?')[0];
-            }
-            function f(element, index) {
-                element.onclick = (() => {
-                    wrapper[index].classList.toggle("show");
-                    element.classList.toggle("rotate");
-                });
-            }
-            const list = document.querySelectorAll('.drop-bnt').forEach(f);
-            const wrapper = document.querySelectorAll(".wrapper");
-
-            const btn_sidebar = document.querySelector('.drop-btn-sidebar');
-            const sidebar = document.querySelector('.sidebar'); 
-
-            btn_sidebar.onclick = (() => {
-                sidebar.classList.toggle("hide");
-            });
-        </script>
 </body>
 </html>

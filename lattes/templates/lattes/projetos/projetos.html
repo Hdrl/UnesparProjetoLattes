@@ -1,5 +1,10 @@
 {% extends 'lattes/layout.html' %}
 {% load lattes_extras %}
+{% load static %}
+
+{% block head %}
+    <script src="{% static 'js/ordenar.js' %}"></script>
+{% endblock %}
 
 {% block main %}
 <div class="container-fluid p-0">
@@ -7,19 +12,27 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="h3 mb-3">Projetos</h1>
-                    <p style="text-align: center;">Foram encontrados {{projetos_filtradas.qs | length}} resultados</p>
+                    <h1 class="h3 mb-3" style="text-align: center;">Projetos</h1>
+                    <div id="info">
+                        <div>Mostrando {{ projeto_page.start_index }}-{{ projeto_page.end_index }} de {{ projeto_page.paginator.count }} resultados</div>
+                        <div>ordenar por:
+                            <select id="ordenar" form="filtro" name="ordenar">
+                                <option value="nome">titulo [A-Z]</option>
+                                <option value="-nome">titulo [Z-A]</option>
+                                <option value="-anoInicio">mais recente</option>
+                                <option value="anoInicio">mais antigo</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         {% for projeto in projeto_page %}
                         <li class="list-group-item">
-                            <h2 style="font-size: 1.3rem;"><b>{{ projeto.nome | title }}</b></h2>
-                            <p style="font-size: 1rem;color: rgb(93, 92, 93);">
-                                Projeto de {{ projeto.tipo | lower }} {{ projeto.situacao | lower}}, iniciado em {{ projeto.anoInicio }} <br>
-                                Coordenador por {{ projeto.coordenador }} <br>
-                                Informado por {{ projeto.informadoPor }} <br>
-                            </p>
+                            <b>{{ projeto.nome | title }}</b>
+                            Projeto de {{ projeto.tipo | lower }} {{ projeto.situacao | lower}}, iniciado em {{ projeto.anoInicio }} <br>
+                            Coordenador por {{ projeto.coordenador }} <br>
+                            Informado por {{ projeto.informadoPor }} <br>
                         </li>
                         {% endfor %}
                     </ul>
@@ -51,13 +64,13 @@
 {% endblock %}
 
 {% block filtro %}
-<form method="GET">
+<form method="GET" id="filtro">
     <li>
         <div class="drop-bnt">
             Nome <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Nome:{{projetos_filtradas.form.nome__contains}}
+            {{projetos_filtradas.form.nome}}
         </div>
     </li>
     <li>
@@ -65,7 +78,7 @@
             Ano Inicio <i class="fa fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Ano Inicio:{{projetos_filtradas.form.anoInicio__exact}}
+            {{projetos_filtradas.form.anoInicio}}
         </div>
     </li>
     <li>
@@ -73,7 +86,7 @@
             Situacao <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper" id="filtroAno">
-            Situacao: {{projetos_filtradas.form.situacao__contains}}
+            {{projetos_filtradas.form.situacao}}
         </div>
     </li>
     <li>
@@ -81,7 +94,7 @@
             Tipo <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Tipo:{{projetos_filtradas.form.tipo__contains}}
+            {{projetos_filtradas.form.tipo}}
         </div>
     </li>
     <li>
@@ -89,7 +102,7 @@
             Coordenador <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Coordenador:{{projetos_filtradas.form.coordenador__contains}}
+            {{projetos_filtradas.form.coordenador}}
         </div>
     </li>
     <li>
@@ -97,12 +110,12 @@
             Informado Por <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            informado por:{{projetos_filtradas.form.informadoPor__contains}}
+            {{projetos_filtradas.form.informadoPor}}
         </div>
     </li>
     <div class="submit">
-        <input type="submit" value="Buscar" class="btn btn-light">
-        <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
+        <input type="submit" value="Buscar" class="btn btn-light" id="btn-submit">
+        <button type="button" class="btn btn-light" onclick="Limpar()" id="btn-limpar">Limpar</button>
     </div>
 </form>
 {% endblock %}

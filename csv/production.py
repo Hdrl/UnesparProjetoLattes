@@ -26,6 +26,8 @@ class ProductionFactory():
             return TrabalhoTecnico()
         elif type.find("ORIENTACAO-EM-ANDAMENTO") != -1  or type== "OUTRAS-ORIENTACOES-EM-ANDAMENTO":
             return OrientacaoAndamento()
+        elif False:
+            pass
         else:
             return IProduction()
 

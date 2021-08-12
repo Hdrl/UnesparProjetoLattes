@@ -17,7 +17,7 @@
         <img src="{% static 'imagens/logo_unespar.png'%}" alt="logo unespar">
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <input type="text" name="username" placeholder="Usuário">
+            <input type="text" name="username" placeholder="Usuário" autofocus>
             <input type="password" name="password" placeholder="Senha">
             <input type="submit" value="Entrar">
         </form>

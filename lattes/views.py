@@ -4,14 +4,29 @@ from django.db.models import Count, Q
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .models import Producao, Pessoas, Projeto
+from .models import Producao, Pessoas, Projeto, AreaConhecimento
 from .filters import ProducaoFilter, PessoasFilter, ProjetoFilter
+import re
+
+def grande_areas(list):
+    result = []
+    for dictionary in list:
+        grandeArea = dictionary['grandeArea']
+        area = dictionary['area']
+        total = dictionary['total']
+        if not grandeArea in [dictionary['grandeArea'] for dictionary in result]:
+            result.append({'grandeArea':grandeArea, 'total':total})
+        else:
+            for dictionary in result:
+                if dictionary['grandeArea'] == grandeArea:
+                    index = result.index(dictionary)
+                    result.__setitem__(index, {'grandeArea':grandeArea, 'total':total + result.__getitem__(index)['total']})
+    return result
+
+def valid_param(param):
+    return param != '' and param != None and param != 'None'
 
 # Create your views here.
-@login_required
-def index(request):
-    return render(request, "lattes/index.html")
-
 @login_required
 def pessoas(request):
     context = {}
@@ -23,28 +38,44 @@ def pessoas(request):
     p = Paginator(pessoas_filtradas.qs, 10)
     page_number = request.GET.get('page')
     Pessoas_page = p.get_page(page_number)
-
+    
     context["Pessoas_page"] = Pessoas_page
     context["pessoas_filtradas"] = pessoas_filtradas
-    context["length"] = len(pessoas_filtradas.qs)
 
     return render(request, "lattes/pessoas/pessoas.html")
 
 @login_required
 def producoes(request):
     context = {}
+    regex = re.compile('(-?[A-Za-z]*)')
+    unicode = re.compile('[A-Za-z_Á-û]*')
+    ordenar = regex.match(str(request.GET.get('ordenar'))).group()
+    area = request.GET.get('area')
+    grandeArea = request.GET.get('grandeArea')
 
-    producoes_filtradas = ProducaoFilter(
+    if ordenar == 'None':
+        ordenar = 'titulo'
+    
+    producoes = Producao.objects.all()
+    if valid_param(grandeArea):
+        print(f'fadfsfaffsdfsaf {grandeArea}')
+        producoes = producoes.filter(areas_conhecimento__grandeArea=grandeArea)
+    elif valid_param(area):
+        producoes = producoes.filter(areas_conhecimento__area=area)
+    producoes_filtrada = ProducaoFilter(
         request.GET,
-        queryset=Producao.objects.all()
+        queryset=producoes.order_by(ordenar)
     )
 
-    p = Paginator(producoes_filtradas.qs, 10)
+    paginator = Paginator(producoes_filtrada.qs, 10)
     page_number = request.GET.get('page')
-    Producao_page = p.get_page(page_number)
-
-    context["Producao_page"] = Producao_page
-    context["producoes_filtradas"] = producoes_filtradas
+    producoes_page = paginator.get_page(page_number)
+    areas = AreaConhecimento.objects.all().values('grandeArea', 'area').annotate(total=Count('id'))
+    context["areas"] = areas
+    context["grande_areas"] = grande_areas(areas)
+    context["producoes"] = zip(producoes_page ,[producao.palavrasChave.all() for producao in producoes_page.object_list], [producao.areas_conhecimento.all() for producao in producoes_page.object_list], [producao.setores_atividade.all() for producao in producoes_page.object_list])
+    context["Producao_page"] = producoes_page
+    context["producoes_filtradas"] = producoes_filtrada
 
     return render(request, "lattes/producoes/producoes.html", context)
 
@@ -87,12 +118,17 @@ def perfilProducao(request):
 @login_required
 def projetos(request):
     context = {}
+    regex = re.compile('(-?[A-Za-z]*)')
+    ordenar = regex.match(str(request.GET.get('ordenar'))).group()
+    
+    if ordenar == 'None':
+        ordenar = 'nome'
 
     projetos_filtradas = ProjetoFilter(
         request.GET,
-        queryset=Projeto.objects.all()
+        queryset=Projeto.objects.all().order_by(ordenar)
     )
-
+    
     p = Paginator(projetos_filtradas.qs, 10)
     page_number = request.GET.get('page')
     projeto_page = p.get_page(page_number)
@@ -109,7 +145,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("lattes:index"))
+            return HttpResponseRedirect(reverse("lattes:pessoas"))
         else:
             return render(request, "lattes/login.html",{
                 "message":"usuário ou senha errado."

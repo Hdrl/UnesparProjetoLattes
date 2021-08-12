@@ -13,3 +13,15 @@ def my_url(value, field_name, urlencode=None):
         url='{}&{}'.format(url, e_querystring)
 
     return url
+
+@register.filter
+def replace(value, arg):
+    """
+    Replacing filter
+    Use `{{ "aaa"|replace:"a|b" }}`
+    """
+    if len(arg.split('|')) != 2:
+        return value
+
+    what, to = arg.split('|')
+    return value.replace(what, to)

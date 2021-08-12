@@ -4,6 +4,14 @@
     font-family: sans-serif, Poppins,Helvetica Neue,Arial;
 }
 
+:root{
+    --primary-dark: #292929;
+    --primary: #363636;
+    --secundary-dark: #487b94;
+    --secundary: #98bbd6;
+    --white: #d3dedc;
+}
+
 body{
     font-size: .825rem;
     font-weight: 400;
@@ -25,6 +33,11 @@ body{
     }
 }
 
+#info{
+    display: flex;
+    justify-content: space-between;
+}
+
 main {
     flex: 1;
     width: 100%;
@@ -44,7 +57,7 @@ main {
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    margin-left: 260px;
+    margin-left: 360px;
     width: 100%;
     min-height: 100vh;
 }
@@ -133,14 +146,12 @@ main {
 
 .sidebar {
     position: fixed;
-    background-color: #292929;
+    background-color: var(--primary-dark);
     color: white;
-    width: 260px;
+    width: 360px;
     height: 100vh;
     overflow: auto;
-}
-
-.navlink.w--current { background-color: var(--default);}
+}   
 
 .sidebar-logo{
     font-weight: 500;
@@ -161,14 +172,6 @@ main {
     font-weight: 500;
 }
 
-.wrapper {
-    display: none;
-}
-
-.wrapper.show {
-    display: block;
-}
-
 .drop-bnt.rotate .fa-angle-down{
     transform: rotate( 180deg);
     position: absolute;
@@ -182,17 +185,6 @@ main {
 
 .drop-bnt a{
     position: relative;
-}
-
-.links a,#filtros .drop-bnt{
-    display: block;
-    padding: .625rem 1.625rem;
-    cursor: pointer;
-}
-
-#filtros .submit,#filtros .wrapper.wrapper.show{
-    margin: .625rem 1.625rem;
-
 }
 
 .submit input, .submit button{
@@ -248,6 +240,70 @@ main {
     cursor: pointer;
 }
 
-#id_ano__gte, #id_ano__lte{
+.links a,#filtros .drop-bnt{
+    display: block;
+    padding: .625rem 1.625rem;
+    cursor: pointer;
+}
+
+#filtros .submit,#filtros .wrapper.wrapper.show{
+    margin: .625rem 1.625rem;
+}
+
+.relative{
+    position: relative;
+}
+
+.center{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Filtros */
+
+#filtro input, #filtro select{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+#filtro #btn-submit{
+    position: inherit;
+    transform: translateX(0);
+}
+
+#filtro #id_ano__gte,#filtro #id_ano__lte{
     width: 50px;
+    position: inherit;
+    transform: translateX(0);
+}
+
+#filtro-area input{
+    position: static;
+    transform: translateX(0);
+}
+
+/* Ordenar */
+
+#ordenar{
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: white;
+}
+
+/* Produção */
+
+.list-group-item{
+    position: relative;
+}
+
+.list-group-item .drop-bnt{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.drop-bnt{
+    cursor: pointer;
 }

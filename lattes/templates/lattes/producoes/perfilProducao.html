@@ -351,13 +351,13 @@
 {% endblock %}
 
 {% block filtro %}
-<form method="GET">
+<form method="GET" id="filtro">
     <li>
         <div class="drop-bnt">
             Titulo <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Titulo:{{producoes_filtradas.form.titulo__contains}}
+            {{producoes_filtradas.form.titulo}}
         </div>
     </li>
     <li>
@@ -365,7 +365,7 @@
             Tipo <i class="fa fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            Tipo:{{producoes_filtradas.form.tipo__contains}}
+            {{producoes_filtradas.form.tipo}}
         </div>
     </li>
     <li>
@@ -382,12 +382,12 @@
             Informado Por <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            informado por:{{producoes_filtradas.form.informadoPor__contains}}
+            {{producoes_filtradas.form.informadoPor}}
         </div>
     </li>
     <div class="submit">
-        <input type="submit" value="Buscar" class="btn btn-light">
-        <button type="button" class="btn btn-light" onclick="Limpar()">Limpar</button>
+        <input type="submit" value="Buscar" class="btn btn-light" id="btn-submit">
+        <button type="button" class="btn btn-light" onclick="Limpar()" id="btn-limpar">Limpar</button>
     </div>
 </form>
 {% endblock %}

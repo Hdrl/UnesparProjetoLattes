@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'lattes',
-    'fontawesome-free',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
