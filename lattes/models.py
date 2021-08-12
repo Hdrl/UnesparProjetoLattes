@@ -22,7 +22,9 @@ class Pessoas(models.Model):
     formacao = models.CharField(max_length=255)
     instituicaoEmQueSeFormou = models.CharField(max_length=255)
     anoQueIngressouNoCampus = models.IntegerField()
-    descricao = models.CharField(max_length=255)
+    srcImage = models.CharField(max_length=255)
+    descricao = models.textfield()
+    ultimaAtualizacao = models.CharField(max_length=255)
 
 class SetorAtividade(models.Model):
     setor = models.CharField(max_length=45)
@@ -60,3 +62,4 @@ class Projeto(models.Model):
 
     def __str__(self):
         return f"(NOME: {self.nome}, INFORMADOPOR: {self.informadoPor}, TIPO: {self.tipo}, ANOINICIO: {self.anoInicio}, IDCURRICULO: {self.idCurriculo}, SITUAÇÃO:{self.situacao}, COORENADOR:{self.coordenador})"
+

@@ -14,11 +14,12 @@
 
 <div class="w3-Container" style="margin-right: 25px;">
     <ul class="w3-ul w3-card-4">
+    {% for pessoa in Pessoas_page %}
         <li class="w3-bar">
-            <p style="margin: 10px; color: grey; font-style: italic;"> Atualizado dia: 12/05/2020 </p>
+            <p style="margin: 10px; color: grey; font-style: italic;"> Atualizado dia: {{pessoa.ultimaAtualizacao}} </p>
             <div class="w3-bar">
                 <div class="w3-bar-item">
-                    <img class="curriculos-circleImage" src="{% static 'imagens/renatoBalancieri.jpg' %}">
+                    <img class="curriculos-circleImage" src={{pessoa.srcImage}}>
                 </div>
 
 
@@ -26,55 +27,21 @@
                     word-break: break-all;
                     white-space: normal;">
 
-                    <span class="w3-large" style="font-weight: 700; font-style: italic;">Renato Balancieri</span><br>
-                    <span>Doutorado</span><br>
-                    <span>SERVIDOR_PUBLICO</span><br>
+                    <span class="w3-large" style="font-weight: 700; font-style: italic;">{{pessoa.nome}}</span><br>
+                    <span>{{pessoa.formacao}} - {{pessoa.instituicaoEmQueSeFormou}} - {{pessoa.anoDeFormacao}}</span><br>
+                    <span>{{pessoa.titulo}}</span><br>
+                    <span>{{pessoa.tipoVinculo}} desde {{pessoa.anoQueIngressouNoCampus}}</span><br>
                     <span></span>
                 </div>
             </div>
             <div class="w3-bar-item w3-right">
                 <button class="accordion">Visualizar</button>
                 <div class="accordion-body panel">
-                    <p>Renato Balancieri possui graduação em Ciência da Computação pela Universidade Estadual de Maringá
-                        (2000), mestrado em Engenharia de Produção - área de concentração em Inteligência Aplicada -
-                        pela Universidade Federal de Santa Catarina (2004) e doutorado em Engenharia e Gestão do
-                        Conhecimento pela Universidade Federal de Santa Catarina (2010). Atualmente é Professor do Curso
-                        de Ciência da Computação da Universidade Estadual do Paraná - Campus Apucarana. Tem experiência
-                        na área Ciência da Computação, atuando principalmente nos seguintes temas: Engenharia de
-                        Software, Computação Aplicada à Saúde, Desenvolvimento Distribuído de Software e Melhoria do
-                        Processo de Desenvolvimento de Software. Gerado pelo Sistema Interlattes CV-Resumé</p>
+                    <p>{{pessoa.descricao}}</p>
                 </div>
             </div>
         </li>
-        <li class="w3-bar">
-            <p style="margin: 10px; color: grey; font-style: italic;"> Atualizado dia: 12/05/2020 </p>
-            <div class="w3-bar">
-                <div class="w3-bar-item">
-                    <img src="{% static 'imagens/cernev.jpg' %}" class="curriculos-circleImage">
-                </div>
-
-
-                <div class="w3-bar-item;
-                word-break: break-all;
-                white-space: normal;">
-
-                    <span class="w3-large" style="font-weight: 700; font-style: italic;">Renato Balancieri</span><br>
-                    <span>Mestrado em Antropologia Social - Universidade Estadual de Campinas - 2004</span><br>
-
-                    <span>SERVIDOR_PUBLICO</span><br>
-                    <span>SERVIDOR_PUBLICO desde 2018</span>
-                </div>
-            </div>
-            <div class="w3-bar-item w3-right">
-                <button class="accordion">Visualizar</button>
-                <div class="accordion-body panel">
-                    <p>Graduado em Ciências Sociais (UEL), graduado em Análise e Desenvolvimento de Sistemas
-                        (UTFPR/Unopar), especialista em Tecnologias para Aplicações Web (Unopar), mestre em Antropologia
-                        Social (Unicamp). Professor assistente na Universidade Estadual do Paraná (UNESPAR), campus
-                        Apucarana.</p>
-                </div>
-            </div>
-        </li>
+    {% endfor %}
     </ul>
 </div>
 <div class="card-footer">

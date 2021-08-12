@@ -23,7 +23,11 @@ class PessoasFilter(django_filters.FilterSet):
         'tipoVinculo': ['contains'],
         'formacao': ['contains'],
         'instituicaoEmQueSeFormou': ['contains'],
-        'anoQueIngressouNoCampus': ['exact']    
+        'anoDeFormacao': ['contains'],
+        'anoQueIngressouNoCampus': ['exacts'],
+        'srcImage': ['contains'],     
+        'descricao' : ['contains'],
+        'ultimaAtualizacao': ['contains']
     }
     
 situacao_choices = (
@@ -45,3 +49,4 @@ class ProjetoFilter(django_filters.FilterSet):
     tipo = django_filters.ChoiceFilter(field_name='tipo', choices=tipo_choices)
     coordenador = django_filters.CharFilter(field_name='coordenador', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite o coordenador'}))
     informadoPor = django_filters.CharFilter(field_name='informadoPor', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite quem informou'}))
+
