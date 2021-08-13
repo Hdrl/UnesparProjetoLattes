@@ -103,10 +103,7 @@
 {% endblock %}
 {% block filtro %}
 <form method="GET" id="filtro">
-    <div class="submit">
-        <input type="submit" value="Buscar" class="btn btn-light" id="btn-submit">
-        <button type="button" class="btn btn-light" onclick="Limpar()" id="btn-limpar">Limpar</button>
-    </div>
+    
     <li>
         <div class="drop-bnt">
             Titulo <i class="fas fa-angle-down"></i>
@@ -170,5 +167,9 @@
             {{producoes_filtradas.form.informadoPor}}
         </div>
     </li>
+    <div class="submit">
+        <input type="submit" value="Buscar" class="btn btn-light" id="btn-submit">
+        <button type="button" class="btn btn-light" onclick="Limpar()" id="btn-limpar">Limpar</button>
+    </div>
 </form>
 {% endblock %}
