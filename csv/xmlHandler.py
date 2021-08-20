@@ -1,3 +1,4 @@
+from csv.xsd import DADOS_GERAIS
 import xml.sax
 import re, os
 from xml.etree import ElementTree
@@ -5,8 +6,7 @@ from csv.AbstractXml import AbstractXml, Element
 from csv.production import ProductionFactory
 from lattes import models
 
-typeList = {"TRABALHO-EM-EVENTOS": ["Produção bibliográfica", "Trabalho publicado em anais de evento"], "ARTIGO-PUBLICADO": ["Produção bibliográfica", "Artigo publicado em periódicos"], "CAPITULO-DE-LIVRO-PUBLICADO": ["Produção bibliográfica", "Capítulo de livro publicado"], "TEXTO-EM-JORNAL-OU-REVISTA": ["Produção bibliográfica", "Texto em jornal ou revista"], "OUTRA-PRODUCAO-BIBLIOGRAFICA": ["Produção bibliográfica", "Outra produção bibliográfica"], "PREFACIO-POSFACIO": ["Produção bibliográfica", "Prefácio, Posfácio"], "TRADUCAO": ["Produção bibliográfica", "Tradução"], "PARTITURA-MUSICAL": ["Produção bibliográfica", "Partitura musical"], "LIVRO-PUBLICADO-OU-ORGANIZADO": ["Produção bibliográfica", "Livro publicado"], "DESENVOLVIMENTO-DE-MATERIAL-DIDATICO-OU-INSTRUCIONAL": ["Produção técnica", "Desenvolvimento de material didático ou instrucional"], "PROGRAMA-DE-RADIO-OU-TV": ["Produção técnica", "Programa de Rádio ou TV"], "TRABALHO-TECNICO": ["Produção técnica", "Trabalhos técnicos"], "OUTRA-PRODUCAO-TECNICA": ["Produção técnica", "Outra produção técnica"], "CURSO-DE-CURTA-DURACAO-MINISTRADO": ["Produção técnica", "Curso de curta duração ministrado"], "APRESENTACAO-DE-TRABALHO": ["Produção técnica", "Apresentação de Trabalho e palestra"], "CARTA-MAPA-OU-SIMILAR": ["Produção técnica|Cartas", "Mapas ou Similares"], "PROCESSOS-OU-TECNICAS": ["Produção técnica", "Processo ou técnica"], "PRODUTO-TECNOLOGICO": ["Produção técnica", "Produto"], "MIDIA-SOCIAL-WEBSITE-BLOG": ["Produção técnica", "Rede social, Website e blog"], "EDITORACAO": ["Produção técnica", "Editoração"], "RELATORIO-DE-PESQUISA": [
-            "Produção técnica", "Relatório de pesquisa"], "SOFTWARE": ["Produção técnica", "Programa de computador"], "ARTES-CENICAS": ["Produção artística/cultural", "Artes Cênicas"], "ARTES-VISUAIS": ["Produção artística/cultural", "Artes Visuais"], "MUSICA": ["Produção artística/cultural", "Música"], "OUTRA-PRODUCAO-ARTISTICA-CULTURAL": ["Produção artística/cultural", "Artes Visuais"], "DEMAIS-TRABALHOS": ["Outro tipo de produção", "Outro tipo de produção"], "BANCA-JULGADORA-PARA-PROFESSOR-TITULAR": ["Banca", "Participação em banca de comissões julgadoras"], "PARTICIPACAO-EM-BANCA-DE-GRADUACAO": ["Banca", "Participação em banca de trabalhos de conclusão"], "PARTICIPACAO-EM-SEMINARIO": ["Evento", "Participações em eventos"], "ORGANIZACAO-DE-EVENTO": ["Evento", "Organização de evento"], "ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO": ["Orientação em andamento", "Dissertação de mestrado"], "ORIENTACAO-EM-ANDAMENTO-DE-APERFEICOAMENTO-ESPECIALIZACAO": ["Orientação em andamento", "Monografia de conclusão de curso de aperfeiçoamento/especialização"], "ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO": ["Orientação em andamento", "Tese de doutorado"], "ORIENTACAO-EM-ANDAMENTO-DE-GRADUACAO": ["Orientação em andamento", "Trabalho de conclusão de curso de graduação"], "ORIENTACAO-EM-ANDAMENTO-DE-POS-DOUTORADO": ["Orientação em andamento", "Supervisão de pós-doutorado"], "OUTRAS-ORIENTACOES-EM-ANDAMENTO": ["Orientação em andamento", "Orientação de outra natureza"], "ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA": ["Orientação em andamento", "Iniciação Científica"], "PATENTE": ["Produção técnica", "Patentes e registros"]}
+typeList = {"TRABALHO-EM-EVENTOS": ["Produção bibliográfica", "Trabalho publicado em anais de evento"], "ARTIGO-PUBLICADO": ["Produção bibliográfica", "Artigo publicado em periódicos"], "CAPITULO-DE-LIVRO-PUBLICADO": ["Produção bibliográfica", "Capítulo de livro publicado"], "TEXTO-EM-JORNAL-OU-REVISTA": ["Produção bibliográfica", "Texto em jornal ou revista"], "OUTRA-PRODUCAO-BIBLIOGRAFICA": ["Produção bibliográfica", "Outra produção bibliográfica"], "PREFACIO-POSFACIO": ["Produção bibliográfica", "Prefácio, Posfácio"], "TRADUCAO": ["Produção bibliográfica", "Tradução"], "PARTITURA-MUSICAL": ["Produção bibliográfica", "Partitura musical"], "LIVRO-PUBLICADO-OU-ORGANIZADO": ["Produção bibliográfica", "Livro publicado"], "DESENVOLVIMENTO-DE-MATERIAL-DIDATICO-OU-INSTRUCIONAL": ["Produção técnica", "Desenvolvimento de material didático ou instrucional"], "PROGRAMA-DE-RADIO-OU-TV": ["Produção técnica", "Programa de Rádio ou TV"], "TRABALHO-TECNICO": ["Produção técnica", "Trabalhos técnicos"], "OUTRA-PRODUCAO-TECNICA": ["Produção técnica", "Outra produção técnica"], "CURSO-DE-CURTA-DURACAO-MINISTRADO": ["Produção técnica", "Curso de curta duração ministrado"], "APRESENTACAO-DE-TRABALHO": ["Produção técnica", "Apresentação de Trabalho e palestra"], "CARTA-MAPA-OU-SIMILAR": ["Produção técnica|Cartas", "Mapas ou Similares"], "PROCESSOS-OU-TECNICAS": ["Produção técnica", "Processo ou técnica"], "PRODUTO-TECNOLOGICO": ["Produção técnica", "Produto"], "MIDIA-SOCIAL-WEBSITE-BLOG": ["Produção técnica", "Rede social, Website e blog"], "EDITORACAO": ["Produção técnica", "Editoração"], "RELATORIO-DE-PESQUISA": ["Produção técnica", "Relatório de pesquisa"], "SOFTWARE": ["Produção técnica", "Programa de computador"], "ARTES-CENICAS": ["Produção artística/cultural", "Artes Cênicas"], "ARTES-VISUAIS": ["Produção artística/cultural", "Artes Visuais"], "MUSICA": ["Produção artística/cultural", "Música"], "OUTRA-PRODUCAO-ARTISTICA-CULTURAL": ["Produção artística/cultural", "Artes Visuais"], "DEMAIS-TRABALHOS": ["Outro tipo de produção", "Outro tipo de produção"], "BANCA-JULGADORA-PARA-PROFESSOR-TITULAR": ["Banca", "Participação em banca de comissões julgadoras"], "PARTICIPACAO-EM-BANCA-DE-GRADUACAO": ["Banca", "Participação em banca de trabalhos de conclusão"], "PARTICIPACAO-EM-SEMINARIO": ["Evento", "Participações em eventos"], "ORGANIZACAO-DE-EVENTO": ["Evento", "Organização de evento"], "ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO": ["Orientação em andamento", "Dissertação de mestrado"], "ORIENTACAO-EM-ANDAMENTO-DE-APERFEICOAMENTO-ESPECIALIZACAO": ["Orientação em andamento", "Monografia de conclusão de curso de aperfeiçoamento/especialização"], "ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO": ["Orientação em andamento", "Tese de doutorado"], "ORIENTACAO-EM-ANDAMENTO-DE-GRADUACAO": ["Orientação em andamento", "Trabalho de conclusão de curso de graduação"], "ORIENTACAO-EM-ANDAMENTO-DE-POS-DOUTORADO": ["Orientação em andamento", "Supervisão de pós-doutorado"], "OUTRAS-ORIENTACOES-EM-ANDAMENTO": ["Orientação em andamento", "Orientação de outra natureza"], "ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA": ["Orientação em andamento", "Iniciação Científica"], "PATENTE": ["Produção técnica", "Patentes e registros"]}
 
 
 class ProductionHandler(xml.sax.ContentHandler):
@@ -106,21 +106,25 @@ class Production():
     def adcionarAreaConhecimento(self, areaConhecimento):
         self.areasConchecimento.append(areaConhecimento)
 
-xml_dir = "csv/xmlstest"
+XML_DIR = "csv/xmlstest"
+
+def todas_pessoas():
+    for file in os.listdir(XML_DIR):
+        salvar_pessoa(os.path.join(XML_DIR, file))
 
 def all_projects():
     print("starting get_all_projects...")
     tmp = []
-    for file in os.listdir(xml_dir):
-        tmp = tmp + get_project(f"{xml_dir}/{file}")
+    for file in os.listdir(XML_DIR):
+        tmp = tmp + get_project(f"{XML_DIR}/{file}")
     print("done...")
     return tmp
 
 def all_productions():
     print("starting get_all_productions...")
     tmp = []
-    for file in os.listdir(xml_dir):
-        list = get_productions_from_xml(os.path.join(xml_dir, file))
+    for file in os.listdir(XML_DIR):
+        list = get_productions_from_xml(os.path.join(XML_DIR, file))
         if  list:
             tmp = tmp + list
     print("done...")
@@ -186,3 +190,47 @@ def get_productions_from_xml(filePath):
                     producao.adcionarAreaConhecimento(models.AreaConhecimento(area=area_conhecimento.attrib["NOME-DA-AREA-DO-CONHECIMENTO"], subArea=area_conhecimento.attrib["NOME-DA-SUB-AREA-DO-CONHECIMENTO"], grandeArea=area_conhecimento.attrib["NOME-GRANDE-AREA-DO-CONHECIMENTO"], especialidade=area_conhecimento.attrib["NOME-DA-ESPECIALIDADE"], producao_id=producao.production))
             tmp.append(producao)
     return tmp
+
+#QNAME
+DADOS_GERAIS = 'DADOS-GERAIS'
+RESUMO = 'RESUMO-CV'
+#ATRIBUTOS
+ATUALIZACAO = 'DATA-ATUALIZACAO'
+NOME = 'NOME-COMPLETO'
+TEXTO_RESUMO = 'TEXTO-RESUMO-CV-RH'
+TITULACAO = 'FORMACAO-ACADEMICA-TITULACAO'
+STATUS_TITULACAO = 'STATUS-DO-CURSO'
+ANO_DE_CONCLUSAO = 'ANO-DE-CONCLUSAO'
+NOME_INSTITUICAO = 'NOME-INSTITUICAO'
+NOME_CURSO = 'NOME-CURSO'
+
+def definir_titulacao(list):
+    if len(list) == 0:
+        return {}
+    
+    for idx in range(1, len(list)):
+        item = list[idx * -1] 
+        if item.get(STATUS_TITULACAO) == "CONCLUIDO":
+            return {
+                'TITULO': item.tag,
+                ANO_DE_CONCLUSAO: item.get(ANO_DE_CONCLUSAO),
+                NOME_INSTITUICAO: item.get(NOME_INSTITUICAO),
+                NOME_CURSO: item.get(NOME_CURSO)}
+    return {
+        ANO_DE_CONCLUSAO: list[0].get(ANO_DE_CONCLUSAO),
+        NOME_INSTITUICAO: list[0].get(NOME_INSTITUICAO),
+        NOME_CURSO: list[0].get(NOME_CURSO)}
+
+def salvar_pessoa(filepath):
+    dom = ElementTree.parse(filepath)
+    dados_gerais = dom.find(DADOS_GERAIS)
+    resumo = dados_gerais.find(RESUMO)
+    titulacao = dados_gerais.find(TITULACAO)
+
+    id = filepath.split('/')[-1]
+    nome = dados_gerais.get(NOME)
+    data_atualizacao = dom.getroot().get(ATUALIZACAO)
+    texto_resumo = resumo.get(TEXTO_RESUMO)
+    titulo = definir_titulacao(list(titulacao))
+
+    models.Pessoas.objects.create(nome=nome, titulo=titulo['TITULO'], last_update=data_atualizacao, resumo=texto_resumo)

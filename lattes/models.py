@@ -30,12 +30,12 @@ class Pessoas(models.Model):
     #srcImage = models.ImageField(upload_to='pessoas')
     resumo = models.TextField()
     last_update = models.CharField(max_length=255)
-     
     tipoVinculo = models.CharField(max_length=255)
     formacao = models.CharField(max_length=255)
     instituicaoEmQueSeFormou = models.CharField(max_length=255)
     anoQueIngressouNoCampus = models.CharField(max_length=255)
     descricao = models.TextField()
+
 class SetorAtividade(models.Model):
     setor = models.CharField(max_length=45)
     producao_id = models.ForeignKey(Producao, on_delete=models.CASCADE, related_name="setores_atividade")
