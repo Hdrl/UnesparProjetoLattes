@@ -314,6 +314,6 @@ main {
     cursor: pointer;
 }
 
-.drop-bnt:hover {
+.sidebar .drop-bnt:hover{
     background-color: var(--bs-gray-dark);
 }
