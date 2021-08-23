@@ -1,10 +1,11 @@
+from django.db.utils import IntegrityError
 from csv.xsd import DADOS_GERAIS
-import xml.sax
-import re, os
 from xml.etree import ElementTree
 from csv.AbstractXml import AbstractXml, Element
 from csv.production import ProductionFactory
 from lattes import models
+from pprint import pprint
+import xml.sax, re, os
 
 typeList = {"TRABALHO-EM-EVENTOS": ["Produção bibliográfica", "Trabalho publicado em anais de evento"], "ARTIGO-PUBLICADO": ["Produção bibliográfica", "Artigo publicado em periódicos"], "CAPITULO-DE-LIVRO-PUBLICADO": ["Produção bibliográfica", "Capítulo de livro publicado"], "TEXTO-EM-JORNAL-OU-REVISTA": ["Produção bibliográfica", "Texto em jornal ou revista"], "OUTRA-PRODUCAO-BIBLIOGRAFICA": ["Produção bibliográfica", "Outra produção bibliográfica"], "PREFACIO-POSFACIO": ["Produção bibliográfica", "Prefácio, Posfácio"], "TRADUCAO": ["Produção bibliográfica", "Tradução"], "PARTITURA-MUSICAL": ["Produção bibliográfica", "Partitura musical"], "LIVRO-PUBLICADO-OU-ORGANIZADO": ["Produção bibliográfica", "Livro publicado"], "DESENVOLVIMENTO-DE-MATERIAL-DIDATICO-OU-INSTRUCIONAL": ["Produção técnica", "Desenvolvimento de material didático ou instrucional"], "PROGRAMA-DE-RADIO-OU-TV": ["Produção técnica", "Programa de Rádio ou TV"], "TRABALHO-TECNICO": ["Produção técnica", "Trabalhos técnicos"], "OUTRA-PRODUCAO-TECNICA": ["Produção técnica", "Outra produção técnica"], "CURSO-DE-CURTA-DURACAO-MINISTRADO": ["Produção técnica", "Curso de curta duração ministrado"], "APRESENTACAO-DE-TRABALHO": ["Produção técnica", "Apresentação de Trabalho e palestra"], "CARTA-MAPA-OU-SIMILAR": ["Produção técnica|Cartas", "Mapas ou Similares"], "PROCESSOS-OU-TECNICAS": ["Produção técnica", "Processo ou técnica"], "PRODUTO-TECNOLOGICO": ["Produção técnica", "Produto"], "MIDIA-SOCIAL-WEBSITE-BLOG": ["Produção técnica", "Rede social, Website e blog"], "EDITORACAO": ["Produção técnica", "Editoração"], "RELATORIO-DE-PESQUISA": ["Produção técnica", "Relatório de pesquisa"], "SOFTWARE": ["Produção técnica", "Programa de computador"], "ARTES-CENICAS": ["Produção artística/cultural", "Artes Cênicas"], "ARTES-VISUAIS": ["Produção artística/cultural", "Artes Visuais"], "MUSICA": ["Produção artística/cultural", "Música"], "OUTRA-PRODUCAO-ARTISTICA-CULTURAL": ["Produção artística/cultural", "Artes Visuais"], "DEMAIS-TRABALHOS": ["Outro tipo de produção", "Outro tipo de produção"], "BANCA-JULGADORA-PARA-PROFESSOR-TITULAR": ["Banca", "Participação em banca de comissões julgadoras"], "PARTICIPACAO-EM-BANCA-DE-GRADUACAO": ["Banca", "Participação em banca de trabalhos de conclusão"], "PARTICIPACAO-EM-SEMINARIO": ["Evento", "Participações em eventos"], "ORGANIZACAO-DE-EVENTO": ["Evento", "Organização de evento"], "ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO": ["Orientação em andamento", "Dissertação de mestrado"], "ORIENTACAO-EM-ANDAMENTO-DE-APERFEICOAMENTO-ESPECIALIZACAO": ["Orientação em andamento", "Monografia de conclusão de curso de aperfeiçoamento/especialização"], "ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO": ["Orientação em andamento", "Tese de doutorado"], "ORIENTACAO-EM-ANDAMENTO-DE-GRADUACAO": ["Orientação em andamento", "Trabalho de conclusão de curso de graduação"], "ORIENTACAO-EM-ANDAMENTO-DE-POS-DOUTORADO": ["Orientação em andamento", "Supervisão de pós-doutorado"], "OUTRAS-ORIENTACOES-EM-ANDAMENTO": ["Orientação em andamento", "Orientação de outra natureza"], "ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA": ["Orientação em andamento", "Iniciação Científica"], "PATENTE": ["Produção técnica", "Patentes e registros"]}
 
@@ -137,24 +138,28 @@ def get_project(filePath):
     parser.parse(filePath)
     return handler.projects
 
-def get_production(filePath):
+def get_production(filepath):
     handler = ProductionHandler()
     parser = xml.sax.make_parser()
     parser.setContentHandler(handler)
-    parser.parse(filePath)
+    parser.parse(filepath)
     return handler.file.getProductions()
 
-def get_productions_from_xml(filePath):
-    dom = ElementTree.parse(filePath)
-    tmp = []
+def get_productions_from_xml(filepath):
+    dom = ElementTree.parse(filepath)
     dados_gerais = dom.find("DADOS-GERAIS")
+    
+    id = filepath.split('/')[-1].split('.')[0]
+    tmp = []
     for element in dom.iter():
         if element.tag in typeList.keys() and "PARTICIPACAO-EM-SEMINARIO" != element.tag:
             producao = Production()
             data = ProductionFactory.get_production(element.tag)
+            sequencia = element.get('SEQUENCIA')
+
             producao.production.tipo = typeList[element.tag].__getitem__(1)        
-            producao.production.tipoAgrupador = typeList[element.tag].__getitem__(0)
-            producao.production.informadoPor = dados_gerais.get("NOME-COMPLETO")
+            producao.production.tipo_agrupador = typeList[element.tag].__getitem__(0)
+            producao.production.informado_por = dados_gerais.get("NOME-COMPLETO")
 
             for childs in list(element):        
                 if childs.tag.find("DADOS-BASICOS") != -1:
@@ -168,9 +173,9 @@ def get_productions_from_xml(filePath):
             for autor in element.findall('AUTORES'):
                 nomeCompleto = autor.get("NOME-COMPLETO-DO-AUTOR")
                 try:
-                    producao.adcionarAutor(models.Autor(nomeCompleto=nomeCompleto, nomeCitacao=autor.attrib["NOME-PARA-CITACAO"], idCNPQ=autor.attrib["NRO-ID-CNPQ"]))
+                    producao.adcionarAutor(models.Autor(nome_completo=nomeCompleto, nome_citacao=autor.attrib["NOME-PARA-CITACAO"], id_CNPQ=autor.attrib["NRO-ID-CNPQ"]))
                 except KeyError:
-                    print(f"file {filePath} has no IDCNP for Autor({nomeCompleto}) in production: {producao.production.titulo}")
+                    print(f"ERRO - não foi possivel extrair o IDCNPQ da producao SEQUENCIA({sequencia}) no arquivo {id}.xml")
             palavra_chave = element.find('PALAVRAS-CHAVE')
             if palavra_chave != None:
                 producao.adcionarPalavra(models.PalavraChave(palavra=palavra_chave.attrib["PALAVRA-CHAVE-1"], producao_id=producao.production))
@@ -187,13 +192,17 @@ def get_productions_from_xml(filePath):
             areas_conhecimento = element.find('AREAS-DO-CONHECIMENTO')
             if(areas_conhecimento):
                 for area_conhecimento in list(areas_conhecimento):
-                    producao.adcionarAreaConhecimento(models.AreaConhecimento(area=area_conhecimento.attrib["NOME-DA-AREA-DO-CONHECIMENTO"], subArea=area_conhecimento.attrib["NOME-DA-SUB-AREA-DO-CONHECIMENTO"], grandeArea=area_conhecimento.attrib["NOME-GRANDE-AREA-DO-CONHECIMENTO"], especialidade=area_conhecimento.attrib["NOME-DA-ESPECIALIDADE"], producao_id=producao.production))
+                    producao.adcionarAreaConhecimento(models.AreaConhecimento(area=area_conhecimento.attrib["NOME-DA-AREA-DO-CONHECIMENTO"], sub_area=area_conhecimento.attrib["NOME-DA-SUB-AREA-DO-CONHECIMENTO"], grande_area=area_conhecimento.attrib["NOME-GRANDE-AREA-DO-CONHECIMENTO"], especialidade=area_conhecimento.attrib["NOME-DA-ESPECIALIDADE"], producao_id=producao.production))
             tmp.append(producao)
     return tmp
 
 #QNAME
 DADOS_GERAIS = 'DADOS-GERAIS'
 RESUMO = 'RESUMO-CV'
+ATUACAO_PROFISSIONAL = 'ATUACOES-PROFISSIONAIS'
+VINCULOS = 'VINCULOS'
+ENDERECO = 'ENDERECO'
+ENDERECO_PROFISSIONAL = 'ENDERECO-PROFISSIONAL'
 #ATRIBUTOS
 ATUALIZACAO = 'DATA-ATUALIZACAO'
 NOME = 'NOME-COMPLETO'
@@ -203,34 +212,116 @@ STATUS_TITULACAO = 'STATUS-DO-CURSO'
 ANO_DE_CONCLUSAO = 'ANO-DE-CONCLUSAO'
 NOME_INSTITUICAO = 'NOME-INSTITUICAO'
 NOME_CURSO = 'NOME-CURSO'
+ENQUADRAMENTO = 'ENQUADRAMENTO-FUNCIONAL'
+OUTRO_ENQUADRAMENTO = 'OUTRO-ENQUADRAMENTO-FUNCIONAL-INFORMADO'
+TIPO_VINCULO = 'TIPO-DE-VINCULO'
+OUTRO_VINCULO = 'OUTRO-VINCULO-INFORMADO'
+ANO_INICIO = 'ANO-INICIO'
+CIDADE = 'CIDADE'
 
-def definir_titulacao(list):
-    if len(list) == 0:
-        return {}
-    
-    for idx in range(1, len(list)):
-        item = list[idx * -1] 
+SIGLA_UNESPAR = 'UNESPAR'
+UNESPAR = 'UNIVERSIDADE ESTADUAL DO PARANÁ'
+#SIGLA_FECEA = 'FECEA'
+#FECEA = 'FACULDADE ESTADUAL DE CIÊNCIAS ECONÔMICAS DE APUCARANA'
+
+cidade_choices = (
+    'APUCARANA',
+    'CAMPO MOURÃO',
+    'CAMPO MOURAO',
+    'CURITIBA',
+    'PARANAGUÁ',
+    'PARANAGUA',
+    'PARANAVAÍ',
+    'PARANAVAI',
+    'UNIÃO DA VITÓRIA',
+    'UNIAO DA VITORIA',
+    'GUATUPÊ',
+    'GUATUPE'
+)
+
+def definir_campus(endereco, id):
+    cidade = endereco.get(CIDADE)
+    cidade_upper = cidade.upper()
+
+    if cidade is not None and cidade_upper in cidade_choices:
+        return cidade
+    print(f"ERRO - não foi possivel indentificar o campus do arquivo {id}.xml")
+    return ''
+
+def definir_vinculo(atuacoes, id):
+    vinculo_recente = {
+        ENQUADRAMENTO: '',
+        OUTRO_ENQUADRAMENTO: '', 
+        TIPO_VINCULO: '',
+        OUTRO_VINCULO: '',
+        ANO_INICIO: ''
+    }
+    maior_ano = -1
+    for item in atuacoes:
+        instituicao = item.get(NOME_INSTITUICAO)
+        instituicao_upper = instituicao.upper()
+        if instituicao_upper.find(SIGLA_UNESPAR) != -1 or instituicao_upper.find(UNESPAR) != -1:
+            vinculos = item.findall(VINCULOS)
+            for vinculo in vinculos:
+                ano_inicio = int(vinculo.get(ANO_INICIO))
+                if maior_ano < ano_inicio:
+                    maior_ano = ano_inicio
+                    vinculo_recente = {
+                        ENQUADRAMENTO: vinculo.get(ENQUADRAMENTO),
+                        OUTRO_ENQUADRAMENTO: vinculo.get(OUTRO_ENQUADRAMENTO), 
+                        TIPO_VINCULO: vinculo.get(TIPO_VINCULO),
+                        OUTRO_VINCULO: vinculo.get(OUTRO_VINCULO),
+                        ANO_INICIO: ano_inicio
+                    }
+    if maior_ano == -1:
+        print(f"ERRO - não foi possivel indentificar o vinculo do arquivo {id}.xml")
+    return vinculo_recente
+
+def definir_titulacao(list, id):
+    for item in list[::-1]:
         if item.get(STATUS_TITULACAO) == "CONCLUIDO":
+            titulacao = item.tag
+            ano_conclusao = item.get(ANO_DE_CONCLUSAO)
+            nome_instituicao = item.get(NOME_INSTITUICAO)
+            nome_curso = item.get(NOME_CURSO)
             return {
-                'TITULO': item.tag,
-                ANO_DE_CONCLUSAO: item.get(ANO_DE_CONCLUSAO),
-                NOME_INSTITUICAO: item.get(NOME_INSTITUICAO),
-                NOME_CURSO: item.get(NOME_CURSO)}
+                TITULACAO: titulacao if titulacao is not None else '',
+                ANO_DE_CONCLUSAO: ano_conclusao if ano_conclusao is not None else '',
+                NOME_INSTITUICAO: nome_instituicao if nome_instituicao is not None else '',
+                NOME_CURSO: nome_curso if nome_curso is not None else '' 
+            }
+    print(f"ERRO - não foi possivel extrair a titulação do arquivo {id}.xml")        
     return {
-        ANO_DE_CONCLUSAO: list[0].get(ANO_DE_CONCLUSAO),
-        NOME_INSTITUICAO: list[0].get(NOME_INSTITUICAO),
-        NOME_CURSO: list[0].get(NOME_CURSO)}
+        TITULACAO: '',
+        ANO_DE_CONCLUSAO: '',
+        NOME_INSTITUICAO: '',
+        NOME_CURSO: ''
+    }
 
 def salvar_pessoa(filepath):
     dom = ElementTree.parse(filepath)
     dados_gerais = dom.find(DADOS_GERAIS)
     resumo = dados_gerais.find(RESUMO)
     titulacao = dados_gerais.find(TITULACAO)
+    atuacoes = dados_gerais.find(ATUACAO_PROFISSIONAL)
+    enderecos = dados_gerais.find(ENDERECO)
+    endereco_profissional = enderecos.find(ENDERECO_PROFISSIONAL)
 
-    id = filepath.split('/')[-1]
+    id = filepath.split('/')[-1].split('.')[0]
+    texto_resumo = resumo.get(TEXTO_RESUMO) if resumo is not None else ''
+    if resumo is None:
+        print(f"ERRO - não foi possivel extrair o resumo do arquivo {id}.xml")
+
     nome = dados_gerais.get(NOME)
     data_atualizacao = dom.getroot().get(ATUALIZACAO)
-    texto_resumo = resumo.get(TEXTO_RESUMO)
-    titulo = definir_titulacao(list(titulacao))
+    titulo = definir_titulacao(list(titulacao), id)
+    vinculo = definir_vinculo(list(atuacoes), id)
 
-    models.Pessoas.objects.create(nome=nome, titulo=titulo['TITULO'], last_update=data_atualizacao, resumo=texto_resumo)
+    campus = definir_campus(endereco_profissional, id) if endereco_profissional is not None else ''
+
+    try:
+        models.Pessoas.objects.create(nome=nome, campus=campus,titulo=titulo[TITULACAO], ano_conclusao=titulo[ANO_DE_CONCLUSAO], curso_formacao=titulo[NOME_CURSO], faculdade_formacao=titulo[NOME_INSTITUICAO], resumo=texto_resumo, vinculo_data_inicio=vinculo[ANO_INICIO], tipo_vinculo=vinculo[TIPO_VINCULO], outro_vinculo=vinculo[OUTRO_VINCULO], enquadramento=vinculo[ENQUADRAMENTO], outro_enquadramento=vinculo[OUTRO_ENQUADRAMENTO], last_update=data_atualizacao)
+    except KeyError as _e:
+        print(f"KEYERROR {_e} - não foi possivel salvar o  arquivo {id}.xml")
+    except IntegrityError as _e:
+        print(f"INTEGRITYERROR {_e} - não foi possivel salvar o arquivo {id}.xml")

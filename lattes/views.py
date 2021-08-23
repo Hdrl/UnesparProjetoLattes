@@ -11,16 +11,16 @@ import re
 def grande_areas(list):
     result = []
     for dictionary in list:
-        grandeArea = dictionary['grandeArea']
+        grande_area = dictionary['grande_area']
         area = dictionary['area']
         total = dictionary['total']
-        if not grandeArea in [dictionary['grandeArea'] for dictionary in result]:
-            result.append({'grandeArea':grandeArea, 'total':total})
+        if not grande_area in [dictionary['grande_area'] for dictionary in result]:
+            result.append({'grande_area':grande_area, 'total':total})
         else:
             for dictionary in result:
-                if dictionary['grandeArea'] == grandeArea:
+                if dictionary['grande_area'] == grande_area:
                     index = result.index(dictionary)
-                    result.__setitem__(index, {'grandeArea':grandeArea, 'total':total + result.__getitem__(index)['total']})
+                    result.__setitem__(index, {'grande_area':grande_area, 'total':total + result.__getitem__(index)['total']})
     return result
 
 def valid_param(param):
@@ -51,17 +51,17 @@ def producoes(request):
     unicode = re.compile('[A-Za-z_Á-û]*')
     ordenar = regex.match(str(request.GET.get('ordenar'))).group()
     area = request.GET.get('area')
-    grandeArea = request.GET.get('grandeArea')
+    grande_area = request.GET.get('grandeArea')
 
     if ordenar == 'None':
         ordenar = 'titulo'
     
     producoes = Producao.objects.all()
-    if valid_param(grandeArea):
-        print(f'fadfsfaffsdfsaf {grandeArea}')
-        producoes = producoes.filter(areas_conhecimento__grandeArea=grandeArea)
+    if valid_param(grande_area):
+        producoes = producoes.filter(areas_conhecimento__grande_area=grande_area)
     elif valid_param(area):
         producoes = producoes.filter(areas_conhecimento__area=area)
+    
     producoes_filtrada = ProducaoFilter(
         request.GET,
         queryset=producoes.order_by(ordenar)
@@ -70,7 +70,7 @@ def producoes(request):
     paginator = Paginator(producoes_filtrada.qs, 10)
     page_number = request.GET.get('page')
     producoes_page = paginator.get_page(page_number)
-    areas = AreaConhecimento.objects.all().values('grandeArea', 'area').annotate(total=Count('id'))
+    areas = AreaConhecimento.objects.all().values('grande_area', 'area').annotate(total=Count('id'))
     context["areas"] = areas
     context["grande_areas"] = grande_areas(areas)
     context["producoes"] = zip(producoes_page ,[producao.palavrasChave.all() for producao in producoes_page.object_list], [producao.areas_conhecimento.all() for producao in producoes_page.object_list], [producao.setores_atividade.all() for producao in producoes_page.object_list])
@@ -92,23 +92,23 @@ def perfilProducao(request):
     context['anos'] = [dic['ano'] for dic in query]
     context['totalAno'] = [dic['total'] for dic in query]
 
-    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipoAgrupador='Produção bibliográfica')
+    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipo_agrupador='Produção bibliográfica')
     context['tiposB'] = [dic['tipo'] for dic in query]
     context['totalTipoB'] = [dic['total'] for dic in query]
 
-    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipoAgrupador='Produção técnica')
+    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipo_agrupador='Produção técnica')
     context['tiposT'] = [dic['tipo'] for dic in query]
     context['totalTipoT'] = [dic['total'] for dic in query]
 
-    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipoAgrupador='Orientação em andamento')
+    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipo_agrupador='Orientação em andamento')
     context['tiposO'] = [dic['tipo'] for dic in query]
     context['totalTipoO'] = [dic['total'] for dic in query]
 
-    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipoAgrupador='Produção artística/cultural')
+    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(tipo_agrupador='Produção artística/cultural')
     context['tiposA'] = [dic['tipo'] for dic in query]
     context['totalTipoA'] = [dic['total'] for dic in query]
 
-    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(Q(tipoAgrupador='Banca') | Q(tipoAgrupador='Evento') | Q(tipoAgrupador='Outro tipo de produção'))
+    query = producoes_filtradas.qs.values('tipo').annotate(total=Count('id')).order_by('tipo').filter(Q(tipo_agrupador ='Banca') | Q(tipo_agrupador='Evento') | Q(tipo_agrupador='Outro tipo de produção'))
     context['tiposE'] = [dic['tipo'] for dic in query]
     context['totalTipoE'] = [dic['total'] for dic in query]
 

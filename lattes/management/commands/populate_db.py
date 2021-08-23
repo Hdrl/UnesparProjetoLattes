@@ -13,6 +13,7 @@ class Command(BaseCommand):
         Pessoas.objects.all().delete()
         print("salvando pessoas...")
         xmlHandler.todas_pessoas()
+        print(f"----{time.time() - start_time}----")
 
     def _create_projects(self):
         start_time = time.time()
@@ -20,11 +21,12 @@ class Command(BaseCommand):
         Projeto.objects.all().delete()
         print("salvando projetos...")
         for p in xmlHandler.all_projects():
-            p1 = Projeto(nome = p["NOME"], idCurriculo = p["IDCURRICULO"], anoInicio = p["ANOINICIO"], situacao = p["SITUACAO"], tipo = p["TIPO"], coordenador = p["COORDENADOR"], informadoPor = p["INFORMADOPOR"])
+            p1 = Projeto(nome = p["NOME"], id_curriculo = p["IDCURRICULO"], ano_inicio = p["ANOINICIO"], situacao = p["SITUACAO"], tipo = p["TIPO"], coordenador = p["COORDENADOR"], informado_por = p["INFORMADOPOR"])
             p1.save()
         print(f"----{time.time() - start_time}----")
 
     def _create_productions(self):
+        start_time = time.time()
         print("exluindo tabelas...")  
         Producao.objects.all().delete()
         print("salvando producoes...")
@@ -37,6 +39,7 @@ class Command(BaseCommand):
                 area.save()
             for palavra in p.palavrasChaves:
                 palavra.save()
+        print(f"----{time.time() - start_time}----")
 
     def handle(self, *args, **options):
         self._create_pessoas()

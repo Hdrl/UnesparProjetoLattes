@@ -37,11 +37,11 @@
                         {% for producao, palavras_chave, areas_conhecimento, setores_atividade in producoes%}
                         <li class="list-group-item">
                             <b>{{ producao.titulo}}.</b> {{ producao.ano }}.<br>
-                            Informado por: {{ producao.informadoPor }} <br>
+                            Informado por: {{ producao.informado_por }} <br>
                             <div class="drop-bnt"><i class="fa fa-plus-circle"></i></div>
                             <div class="wrapper">
                                 <span style="color: #999999;"> Tipo: </span>{{ producao.tipo }}<span 
-                                style="color: #999999;"> Tipo Agrupador: </span> {{ producao.tipoAgrupador }}<br>
+                                style="color: #999999;"> Tipo Agrupador: </span> {{ producao.tipo_agrupador }}<br>
                                 <span style="color: #999999;">Palavras-Chave:</span>
                                 {% for p in palavras_chave %}
                                 {% if forloop.last %}
@@ -54,7 +54,7 @@
                                 {% endfor %}
                                 <br><span style="color: #999999;">Área de conhecimento:</span>
                                 {% for a in areas_conhecimento %}
-                                <br>{{forloop.counter}}. <span style="color: #999999;">Grande área: </span>{{a.grandeArea | lower | replace:"_| " }} <span style="color: #999999;">Área: </span>{{ a.area | default:"Não informado" }} <span style="color: #999999;">Sub área: </span>{{ a.subArea | default:"Não informado" }}
+                                <br>{{forloop.counter}}. <span style="color: #999999;">Grande área: </span>{{a.grande_area | lower | replace:"_| " }} <span style="color: #999999;">Área: </span>{{ a.area | default:"Não informado" }} <span style="color: #999999;">Sub área: </span>{{ a.sub_area | default:"Não informado" }}
                                 {% if not forloop.last %}
                                 ,
                                 {% else %}
@@ -103,7 +103,6 @@
 {% endblock %}
 {% block filtro %}
 <form method="GET" id="filtro">
-    
     <li>
         <div class="drop-bnt">
             Titulo <i class="fas fa-angle-down"></i>
@@ -140,15 +139,15 @@
                     <div class="drop-bnt" style="padding: 0px;display: inline-block;">
                         <i class="fa fa-plus-circle"></i>
                     </div>
-                        <input type="checkbox" name="grandeArea" id="{{ grande_area.grandeArea }}" value="{{ grande_area.grandeArea }}">
-                        <label for="{{ grande_area.grandeArea }}">{{ grande_area.grandeArea | lower | capfirst | replace:"_| " | default:'Não informado' }}( {{ grande_area.total }} )</label>
+                        <input type="checkbox" name="grandeArea" id="{{ grande_area.grande_area }}" value="{{ grande_area.grande_area }}">
+                        <label for="{{ grande_area.grande_area }}">{{ grande_area.grande_area | lower | capfirst | replace:"_| " | default:'Não informado' }}( {{ grande_area.total }} )</label>
                     <div class="wrapper">
                         <ul style="padding-left: 50px;">
                         {% for area in areas %}
-                        {% if area.grandeArea == grande_area.grandeArea%}
+                        {% if area.grande_area == grande_area.grande_area%}
                         <li>
-                            <input type="checkbox" name="area" id="{{ grande_area.grandeArea }}-{{ area.area }}" value="{{ area.area }}">
-                            <label for="{{ grande_area.grandeArea }}-{{ area.area }}">{{ area.area | default:'Não informado' }}( {{ area.total }} )</label>
+                            <input type="checkbox" name="area" id="{{ grande_area.grande_area }}-{{ area.area }}" value="{{ area.area }}">
+                            <label for="{{ grande_area.grande_area }}-{{ area.area }}">{{ area.area | default:'Não informado' }}( {{ area.total }} )</label>
                         </li>
                         {% endif %}
                         {% endfor %}
@@ -164,7 +163,7 @@
             Informado Por <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            {{producoes_filtradas.form.informadoPor}}
+            {{producoes_filtradas.form.informado_por}}
         </div>
     </li>
     <div class="submit">

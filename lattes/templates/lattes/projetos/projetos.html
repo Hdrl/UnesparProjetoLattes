@@ -30,9 +30,9 @@
                         {% for projeto in projeto_page %}
                         <li class="list-group-item">
                             <b>{{ projeto.nome | title }}</b>
-                            Projeto de {{ projeto.tipo | lower }} {{ projeto.situacao | lower}}, iniciado em {{ projeto.anoInicio }} <br>
+                            Projeto de {{ projeto.tipo | lower }} {{ projeto.situacao | lower}}, iniciado em {{ projeto.ano_inicio }} <br>
                             Coordenador por {{ projeto.coordenador }} <br>
-                            Informado por {{ projeto.informadoPor }} <br>
+                            Informado por {{ projeto.informado_por }} <br>
                         </li>
                         {% endfor %}
                     </ul>
@@ -78,7 +78,7 @@
             Ano Inicio <i class="fa fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            {{projetos_filtradas.form.anoInicio}}
+            {{projetos_filtradas.form.ano_inicio}}
         </div>
     </li>
     <li>
@@ -110,7 +110,7 @@
             Informado Por <i class="fas fa-angle-down"></i>
         </div>
         <div class="wrapper">
-            {{projetos_filtradas.form.informadoPor}}
+            {{projetos_filtradas.form.informado_por}}
         </div>
     </li>
     <div class="submit">
