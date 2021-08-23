@@ -30,19 +30,24 @@ def valid_param(param):
 @login_required
 def pessoas(request):
     context = {}
-
+    regex = re.compile('(-?[A-Za-z]*)')
+    unicode = re.compile('[A-Za-z_Á-û]*')
+    ordenar = regex.match(str(request.GET.get('ordenar'))).group()
+    pessoas = Pessoas.objects.all()
+    if ordenar == 'None':
+        ordenar = 'nome'
     pessoas_filtradas = PessoasFilter(
-        request.GET,
-        queryset=Pessoas.objects.all()
+       request.GET,
+       queryset=pessoas.order_by(ordenar)
     )
     p = Paginator(pessoas_filtradas.qs, 10)
     page_number = request.GET.get('page')
-    Pessoas_page = p.get_page(page_number)
+    page_pessoas = p.get_page(page_number)
     
-    context["Pessoas_page"] = Pessoas_page
+    context["page_pessoas"] = page_pessoas
     context["pessoas_filtradas"] = pessoas_filtradas
-
-    return render(request, "lattes/pessoas/pessoas.html")
+   
+    return render(request, "lattes/pessoas/pessoas.html", context)
 
 @login_required
 def producoes(request):

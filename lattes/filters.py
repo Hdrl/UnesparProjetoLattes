@@ -15,20 +15,13 @@ class ProducaoFilter(django_filters.FilterSet):
         }
 
 class PessoasFilter(django_filters.FilterSet):
-    model = Pessoas
-    fields = {
-        'nome': ['contains'],
-        'campus': ['contains'],
-        'titulo': ['contains'],
-        'tipoVinculo': ['contains'],
-        'formacao': ['contains'],
-        'instituicaoEmQueSeFormou': ['contains'],
-        'anoDeFormacao': ['contains'],
-        'anoQueIngressouNoCampus': ['exacts'],
-        'srcImage': ['contains'],     
-        'descricao' : ['contains'],
-        'ultimaAtualizacao': ['contains']
-    }
+    
+    
+    nome = django_filters.CharFilter(field_name='nome', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite nome'}))
+    campus = django_filters.CharFilter(field_name='campus', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite campus'}))
+    titulo =  django_filters.CharFilter(field_name='titulo', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite titulo'}))
+    tipo_vinculo = django_filters.CharFilter(field_name='tipo_vinculo', lookup_expr='contains', widget=TextInput(attrs={'placeholder': 'Digite tipo de vinculo'}))
+    
     
 situacao_choices = (
     ('CONCLUIDO', 'Concluido'),
